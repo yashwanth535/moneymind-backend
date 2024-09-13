@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+
+    <h1>Login Form</h1>
+    <form id="loginform">
+        <input placeholder="Email" name="email" type="text" id="email" required>
+        <br>
+        <input placeholder="Password" name="password" type="password" id="password" required>
+        <br>
+        <input class="sub" type="submit" value="Login">
+        <h3>don't have an account?</h3>
+        <a href="/register">register</a>
+    </form>
+
+    <script>
+        async function loginUser(event) {
+            event.preventDefault(); // Prevent form submission
+            console.log("enterd");
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                console.log('Response data:', data);
+                if (data.success) {
+                    // Store email in local storage
+                    console.log("successul");
+                    localStorage.setItem('email', data.email);
+                    console.log('Email stored in local storage:', data.email);
+                    // Redirect to home or show a success message
+                    window.location.href = '/loadhome'; // Example redirect
+                } else {
+                    console.log('Login failed:', data.message);
+                    // Show error message to the user
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                // Handle fetch error
+            }
+        }
+
+        document.getElementById('loginform').addEventListener('submit', loginUser);
+    </script>
+
+</body>
+</html>

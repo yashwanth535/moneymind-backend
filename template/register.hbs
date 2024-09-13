@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+ <p>This is the register page</p>
+  <form id="registerForm">
+    <input placeholder="Name" name="email" type="text" id="email" required>
+    <br>
+    <input placeholder="Password" name="password" type="password" id="password" required>
+    <br>
+    <input class="sub" type="submit" value="Register">
+    <h3>Already have an account?</h3>
+    <a href="/login">Login</a>
+  </form>
+  
+  <!-- Placeholder for error/success messages -->
+  <div id="message" style="color: red;"></div>
+
+  <script>
+   async function registerUser(event) {
+  event.preventDefault(); // Prevent form submission
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const messageDiv = document.getElementById('message');
+
+  // Clear any previous messages
+  messageDiv.textContent = '';
+
+  // Send registration request to the server
+  try {
+    const response = await fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (response.status === 400) {
+      // Display the message on the registration page
+      messageDiv.textContent = data.message;
+    } else if (response.status === 200) {
+      // Display success message
+
+      messageDiv.style.color = 'green';
+    messageDiv.innerHTML = '<h1>' + data.message + '</h1>';
+
+  
+      // Optionally redirect to home or another page
+     
+    } else {
+      // Handle other errors
+      messageDiv.textContent = 'An error occurred. Please try again.';
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+    messageDiv.textContent = 'An unexpected error occurred. Please try again.';
+  }
+}
+
+// Attach the event listener to the form
+document.getElementById('registerForm').addEventListener('submit', registerUser);
+
+  </script>
+  </body>
+</html>
+
+
+
+
