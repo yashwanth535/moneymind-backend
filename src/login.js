@@ -165,22 +165,25 @@ app.post('/add-expense', async (req, res) => {
 
 
 
-// server.js or app.js
 
-app.get('/expenses', async (req, res) => {
-  const { email } = req.query;
+
+
+
+app.get('/fetch-expenses', async (req, res) => {
+  const { email } = req.query; // Fetch email from query parameters
 
   if (!email) {
-      return res.status(400).json({ message: 'Email is required' });
+      return res.status(400).json({ error: 'Email is required' });
   }
 
   try {
-      const Expense = getExpenseModel(email);
-      const expenses = await Expense.find({}).exec();
-      res.json(expenses);
+      const Expense = getExpenseModel(email); // Dynamically get the expense model for this user
+
+      const expenses = await Expense.find(); // Fetch all expenses for this user
+      res.status(200).json(expenses);
   } catch (err) {
       console.error('Error fetching expenses:', err);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({ error: 'Error fetching expenses', details: err.message });
   }
 });
 

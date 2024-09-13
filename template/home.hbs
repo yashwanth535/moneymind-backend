@@ -54,12 +54,14 @@
         td {
             background-color: #f9f9f9;
         }
+        
     </style>
 </head>
 <body id="body" style="display:none;">
     <h1>Add Expense</h1>
     <button onclick="addex()">Add Expenses</button>
-    <button onclick="showex()">Show Expenses</button>
+   <button id="fetch-expenses-btn">Show Expenses</button>
+<div id="expense-list"></div>
 
     <form id="expenseForm" style="display:none;">
         <div class="form-group">
@@ -82,19 +84,8 @@
         <p id="message"></p>
     </form>
 
-    <table id="expensesTable" style="display:none;">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Purpose</th>
-                <th>Mode of Payment</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Expenses will be populated here -->
-        </tbody>
-    </table>
+
+  
 
     <script>
         window.onload = function() {
@@ -106,43 +97,11 @@
 
         function addex() {
             document.getElementById('expenseForm').style.display = "block";
-            document.getElementById('expensesTable').style.display = "none";
+            document.getElementById('expense-list').style.display = "none";
+     
         }
 
-        function showex() {
-            document.getElementById('expenseForm').style.display = "none";
-            document.getElementById('expensesTable').style.display = "table";
-            const email = localStorage.getItem('email'); // Retrieve the email from local storage
-
-            if (!email) {
-                document.body.innerHTML = 'You need to be logged in to view expenses.';
-                return;
-            }
-
-            fetch(`/expenses?email=${encodeURIComponent(email)}`)
-                .then(response => response.json())
-                .then(expenses => {
-                    const tableBody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
-                    tableBody.innerHTML = ''; // Clear existing rows
-                    
-                    expenses.forEach(expense => {
-                        const row = tableBody.insertRow();
-                        const dateCell = row.insertCell(0);
-                        const amountCell = row.insertCell(1);
-                        const purposeCell = row.insertCell(2);
-                        const modeCell = row.insertCell(3);
-
-                        dateCell.textContent = new Date(expense.date).toLocaleString();
-                        amountCell.textContent = expense.amount;
-                        purposeCell.textContent = expense.purpose;
-                        modeCell.textContent = expense.modeOfPayment;
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching expenses:', error);
-                    document.body.innerHTML = 'An unexpected error occurred. Please try again.';
-                });
-        }
+            
 
         document.getElementById('expenseForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent form submission
@@ -180,7 +139,31 @@
                 document.getElementById('message').style.color = 'red';
                 document.getElementById('message').textContent = 'An unexpected error occurred. Please try again.';
             }
+        }); 
+
+
+
+        document.getElementById('fetch-expenses-btn').addEventListener('click', async function () {
+    const userEmail = localStorage.getItem('email'); // Retrieve the email from local storage
+    const response = await fetch(`/fetch-expenses?email=${encodeURIComponent(userEmail)}`);
+    document.getElementById('expense-list').style.display = "block";
+     document.getElementById('expenseForm').style.display = "none";
+    if (response.ok) {
+        const expenses = await response.json();
+        const expenseList = document.getElementById('expense-list');
+        expenseList.innerHTML = '';
+        
+        expenses.forEach(expense => {
+            const div = document.createElement('div');
+            div.classList.add('expense-item');
+            div.textContent = `Amount: ${expense.amount}, Date: ${expense.date}, Purpose: ${expense.purpose}, Mode of Payment: ${expense.modeOfPayment}`;
+            expenseList.appendChild(div);
         });
+    } else {
+        alert('Error fetching expenses');
+    }
+});
+
     </script>
 </body>
 </html>
