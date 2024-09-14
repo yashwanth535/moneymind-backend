@@ -1,23 +1,25 @@
-// src/login.js
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-require('dotenv').config();
-const User = require('./models/User');
-const getExpenseModel = require('./models/expense');
+const configureApp = require("../src/middleware/appConfig");
+const User = require("../src/models/User"); // Import User model here
+const getExpenseModel = require("../src/models/expense");
+const app = configureApp();
+
+
+
+
+
+
+
 // const isAuthenticated = require('./middleware/isAuthenticated');
-const app = express();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
-// Set up Handlebars as the view engine
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, '../template')); // Path to the 'template' folder
+// const app = express();
+
+
+
+ // Path to the 'template' folder
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, '../public')));
+// app.use(express.static(path.join(__dirname, '../public')));
 
 // Serve the login.hbs file when the root URL is accessed
 
@@ -79,6 +81,7 @@ app.get('/loadhome', (req,res)=>{
 
 
  app.post('/login', async (req, res) => {
+  console.log("in post");
   const { email, password } = req.body;
   
   try {

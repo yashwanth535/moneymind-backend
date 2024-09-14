@@ -1,30 +1,22 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-require('dotenv').config();
-const User = require('./models/User');
+const configureApp = require("../src/middleware/appConfig");
+const loginRoutes = require("./routes/login");
+const registerRoutes = require("./routes/register");
+const addExpenseRoutes = require("./routes/addExpense")
+const fetchExpenseRoutes = require("./routes/fetchExpense")
+const homeRoutes =require("./routes/home")
 
-const app = express();
+const app = configureApp();
 
-// Middleware setup
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Use the login router for login-related routes
+app.use("/", loginRoutes);
+app.use("/login", loginRoutes);
+app.use("/register",registerRoutes);
+app.use("/add-expense",addExpenseRoutes);
+app.use("/fetch-expenses",fetchExpenseRoutes);
+app.use("/loadhome",homeRoutes);
 
-// Set up Handlebars as the view engine
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, '../template')); // Path to the 'template' folder
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, '../public')));
-
-// Serve the login.hbs file when the root URL is accessed
-app.get('/', (req, res) => {
-  res.render('login'); // Ensure 'login' corresponds to a valid template
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000; // Ensure the port number is valid
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`listening to ${PORT}`);
 });
