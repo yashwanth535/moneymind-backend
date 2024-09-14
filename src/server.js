@@ -4,6 +4,7 @@ const registerRoutes = require("./routes/register");
 const addExpenseRoutes = require("./routes/addExpense")
 const fetchExpenseRoutes = require("./routes/fetchExpense")
 const homeRoutes =require("./routes/home")
+const logoutRoutes=require("./routes/logout");
 
 const app = configureApp();
 
@@ -13,7 +14,8 @@ app.use("/login", loginRoutes);
 app.use("/register",registerRoutes);
 app.use("/add-expense",addExpenseRoutes);
 app.use("/fetch-expenses",fetchExpenseRoutes);
-app.use("/loadhome",homeRoutes);
+app.use("/home",homeRoutes);
+app.use("/logout",logoutRoutes)
 
 
 const PORT = 3000;

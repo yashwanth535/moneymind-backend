@@ -38,13 +38,14 @@
 
                 const data = await response.json();
                 console.log('Response data:', data);
+                
                 if (data.success) {
                     // Store email in local storage
                     console.log("successul");
-                    localStorage.setItem('email', data.email);
+                    sessionStorage.setItem('email', data.email);
                     console.log('Email stored in local storage:', data.email);
                     // Redirect to home or show a success message
-                    window.location.href = '/loadhome'; // Example redirect
+                    window.location.href = '/home'; // Example redirect
                 } else {
                     console.log('Login failed:', data.message);
                     // Show error message to the user

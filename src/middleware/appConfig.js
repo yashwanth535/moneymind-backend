@@ -7,6 +7,7 @@ const bodyParser=require("body-parser");
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const getExpenseModel = require('../models/expense');
+const session = require('express-session');
 
 
 
@@ -30,6 +31,14 @@ const configureApp = () => {
   // Set static files directory
   app.use(express.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+
+
+   app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set secure: true if using HTTPS
+}));
 
   
  

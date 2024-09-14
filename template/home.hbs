@@ -83,13 +83,16 @@
         <button type="submit">Add Expense</button>
         <p id="message"></p>
     </form>
+    
+     <button onclick="window.location.href='/logout'">Logout</button>
+
 
 
   
 
     <script>
         window.onload = function() {
-            const email = localStorage.getItem('email');
+            const email = sessionStorage.getItem('email');
             if (email) {
                 document.getElementById("body").style.display = "block";
             } 
@@ -106,7 +109,7 @@
         document.getElementById('expenseForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent form submission
 
-            const email = localStorage.getItem('email'); // Retrieve the email from local storage
+            const email = sessionStorage.getItem('email'); // Retrieve the email from local storage
             if (!email) {
                 document.getElementById('message').textContent = 'You need to be logged in to add expenses.';
                 return;
@@ -144,7 +147,8 @@
 
 
         document.getElementById('fetch-expenses-btn').addEventListener('click', async function () {
-    const userEmail = localStorage.getItem('email'); // Retrieve the email from local storage
+    const userEmail = sessionStorage.getItem('email'); // Retrieve the email from local storage
+
     const response = await fetch(`/fetch-expenses?email=${encodeURIComponent(userEmail)}`);
     document.getElementById('expense-list').style.display = "block";
      document.getElementById('expenseForm').style.display = "none";
