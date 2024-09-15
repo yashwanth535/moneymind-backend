@@ -9,6 +9,7 @@ const logoutRoutes=require("./routes/logout");
 const app = configureApp();
 
 
+
 // Use the login router for login-related routes
 app.use("/", loginRoutes);
 app.use("/login", loginRoutes);
