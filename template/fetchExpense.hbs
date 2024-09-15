@@ -54,12 +54,28 @@
         td {
             background-color: #f9f9f9;
         }
-        
     </style>
 </head>
 <body id="body" style="display:none;">
-    <h1>Add Expense</h1>
-    <form id="expenseForm" style="display:block;">
+    <h1>FETCH EXPENSE</h1>
+    <button id="fetch-expenses-btn">Show Expenses</button>
+    <div id="expense-list" style="display:none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Mode of Payment</th>
+                </tr>
+            </thead>
+            <tbody id="expense-tbody">
+                <!-- Table rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <form id="expenseForm" style="display:none;">
         <div class="form-group">
             <label for="amount">Amount:</label>
             <input type="number" id="amount" name="amount" required>
@@ -80,12 +96,8 @@
         <p id="message"></p>
     </form>
     
-     <button onclick="window.location.href='/logout'">Logout</button>
-     <button onclick="window.location.href='/home'">home</button>
-
-
-
-  
+    <button onclick="window.location.href='/logout'">Logout</button>
+    <button onclick="window.location.href='/home'">Home</button>
 
     <script>
         window.onload = function() {
@@ -94,47 +106,33 @@
                 document.getElementById("body").style.display = "block";
             } 
         };
- 
 
-        document.getElementById('expenseForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent form submission
+        document.getElementById('fetch-expenses-btn').addEventListener('click', async function () {
+            const userEmail = sessionStorage.getItem('email'); // Retrieve the email from local storage
 
-            const email = sessionStorage.getItem('email'); // Retrieve the email from local storage
-            if (!email) {
-                document.getElementById('message').textContent = 'You need to be logged in to add expenses.';
-                return;
-            }
+            const response = await fetch(`/fetch-expenses/fetchdata?email=${encodeURIComponent(userEmail)}`);
+            document.getElementById('expense-list').style.display = "block";
+            document.getElementById('expenseForm').style.display = "none";
 
-            const amount = document.getElementById('amount').value;
-            const date = document.getElementById('date').value;
-            const purpose = document.getElementById('purpose').value;
-            const modeOfPayment = document.getElementById('modeOfPayment').value;
+            if (response.ok) {
+                const expenses = await response.json();
+                const tbody = document.getElementById('expense-tbody');
+                tbody.innerHTML = ''; // Clear existing rows
 
-            try {
-                const response = await fetch('/add-expense', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, amount, date, purpose, modeOfPayment })
+                expenses.forEach(expense => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${expense.amount}</td>
+                        <td>${expense.date}</td>
+                        <td>${expense.purpose}</td>
+                        <td>${expense.modeOfPayment}</td>
+                    `;
+                    tbody.appendChild(row);
                 });
-
-                const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('message').style.color = 'green';
-                    document.getElementById('message').textContent = data.message;
-                } else {
-                    document.getElementById('message').style.color = 'red';
-                    document.getElementById('message').textContent = data.message || 'An error occurred.';
-                }
-            } catch (error) {
-                console.error('Error adding expense:', error);
-                document.getElementById('message').style.color = 'red';
-                document.getElementById('message').textContent = 'An unexpected error occurred. Please try again.';
+            } else {
+                alert('Error fetching expenses');
             }
-        }); 
-
-
+        });
     </script>
 </body>
 </html>

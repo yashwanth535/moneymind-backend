@@ -10,6 +10,15 @@ const getExpenseModel = require('../models/expense');
 const session = require('express-session');
 
 
+function isAuthenticated(req, res, next) {
+  if (req.session.user) {
+      // If user is authenticated, move to the next middleware or route
+      next();
+  } else {
+      // If user is not authenticated, redirect to login
+      res.redirect('/login');
+  }
+}
 
 
 const configureApp = () => {
@@ -40,10 +49,20 @@ const configureApp = () => {
     cookie: { secure: false } // Set secure: true if using HTTPS
 }));
 
+// appConfig.js
+
+// Middleware to check if the user is authenticated
+
+
+
   
  
 
   return app;
 };
 
-module.exports = configureApp;
+
+module.exports = {
+  isAuthenticated,
+  configureApp
+};

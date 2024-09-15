@@ -1,0 +1,5 @@
+{
+  "watch": ["src/**/*.js", "template/**/*.hbs"],
+  "ext": "js,hbs,json",
+  "ignore": ["node_modules"]
+}

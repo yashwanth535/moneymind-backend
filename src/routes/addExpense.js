@@ -3,9 +3,9 @@ const router = express.Router();
 const User = require("../models/User"); // Import User model here
 const getExpenseModel = require("../models/expense");
 
-
-
-
+router.get('/',(req,res)=>{
+  res.render('addExpense');
+});
 
 router.post('/', async (req, res) => {
   const { email, amount, date, purpose, modeOfPayment } = req.body;

@@ -3,7 +3,15 @@ const router = express.Router();
 const User = require("../models/User"); // Import User model here
 const getExpenseModel = require("../models/expense");
 
-router.get('/', async (req, res) => {
+
+router.get('/',(req,res)=>{
+    console.log("in fetch expense");
+    res.render('fetchExpense');
+  });
+
+
+router.get('/fetchdata', async (req, res) => {
+    console.log("in fetch router get funtion");
   const { email } = req.query; // Fetch email from query parameters
 
   if (!email) {
