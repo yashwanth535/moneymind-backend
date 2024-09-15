@@ -48,13 +48,14 @@
     if (response.status === 400) {
       // Display the message on the registration page
       messageDiv.textContent = data.message;
-    } 
-    
-    else if (response.status === 200) {
+    } else if (response.status === 200) {
       // Display success message
-     sessionStorage.setItem('email', data.email);
-    console.log('Email stored in local storage:', data.email);
-     window.location.href = '/home';
+
+      messageDiv.style.color = 'green';
+    messageDiv.innerHTML = '<h1>' + data.message + '</h1>';
+
+  
+      // Optionally redirect to home or another page
      
     } else {
       // Handle other errors

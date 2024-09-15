@@ -16,7 +16,6 @@
         <input placeholder="Password" name="password" type="password" id="password" required>
         <br>
         <input class="sub" type="submit" value="Signin">
-        <p id="message"></p>
         <h3>don't have an account?</h3>
         <button class="sub" onclick="window.location.href='/register'">Signup</button>
     </form>
@@ -48,7 +47,6 @@
                     // Redirect to home or show a success message
                     window.location.href = '/home'; // Example redirect
                 } else {
-                    document.getElementById('message').innerHTML=data.message;
                     console.log('Login failed:', data.message);
                     // Show error message to the user
                 }
