@@ -1,58 +1,71 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Expense Tracker</title>
+    <title>Money Mind</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #000000;
-            color: #fff;
+        *{
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
-  
+
+        header{
+                
+                 background-color: black;
+                 
+        } 
         .header{
-              background-color: #ACF6D5;
-              display:flex;
-              height:65px;
-              margin:5px;
+                    margin-top: 10px;
+                    background-color: white;
+                    display:flex;
+                    height:60px;
+                    justify-content: space-between;
+                align-items: center;
+                
+                
+                   
              }
-        .navbar {
-            background-color: #ACF6D5;
-         
-            width: 100%;
-        }
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            justify-content: right; 
-        }
-        .navbar ul li {
-            margin: 0 20px;
-        }
-        .navbar ul li a {
-            color: rgb(18, 19, 19);
-            text-decoration: none;
-            font-size: 1.2em;
-        }
+             .navbar {
+
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar ul{
+    list-style: none;
+    display: flex;
+    text-decoration: none;
+   
+}
+
+.navbar ul li a{
+    margin: 0 20px;
+    color:black;
+
+    text-decoration: none;
+}
         .navbar ul li a:hover {
-            font-size: 1.3em;
             text-shadow: #000000;
             text-decoration: underline;
         }
+        .menu-toggle {
+    display: none;
+    background-color: #000000;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
 
+}
 
         .hero-section {
            
             background-size: cover;
             background-position: center;
             height: 80vh;
-            color: white;
+            color:black;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -60,9 +73,11 @@
         }
         .hero-section h2 {
             font-size: 3em;
-            color: #ffcb05;
+            /* color: #ffcb05; */
+            color:black;
         }
         .hero-section p {
+            color:black;
             font-size: 1.5em;
             margin: 20px 0;
         }
@@ -93,72 +108,99 @@
             flex-wrap: wrap;
         }
         .feature-card {
-            background-color: #1a1a1a;
+            background-color: #ebe4e4;
+            color:black;
             width: 30%;
             padding: 20px;
             margin: 10px;
             border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            border:solid;
+            border-width:1px;
+            box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
         }
         .feature-card h4 {
             font-size: 1.5em;
             margin-bottom: 15px;
-            color: #ffffff;
+            color: black;
         }
+
+
         .footer {
-            background-color: #1a1a1a;
-            color: white;
+            background-color: #ebe4e4;
+            color: rgb(0, 0, 0);
             padding: 20px 0;
             text-align: center;
         }
         .footer a {
-            color: #ffffff;
+            color: #000000;
             text-decoration: none;
         }
         .footer a:hover {
-            color: #ffffff;
+            color: #000000;
         }
         /* Media Queries for responsiveness */
-        @media (max-width: 768px) {
-            .feature-card {
-                width: 90%;
-            }
-            .navbar ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            .navbar ul li {
-                margin: 10px 0;
-            }
-        }
+      @media (max-width: 768px) {
+        .menu-toggle {
+        display: block; /* Show menu button on mobile */
+    }
+    .navbar ul {
+        display: none; /* Initially hidden */
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0; /* Align to the right */
+        height: 80px; /* Full height */
+        width: 150px; /* Adjust width as needed */
+         /* Offset for header */
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%); /* Hidden off-screen to the right */
+    }
+    .navbar li{
+        margin-top: 5px;
+         text-shadow: 0px 0px 20px #000000;
+    
+    }
+
+    .navbar.active ul {
+        margin-top: 70px;
+        display: flex;
+        transform: translateX(0); /* Slide-in effect */
+    }
+
+    
+}
+
+
     </style>
 </head>
-<body>
+<body id="home">
 
     <header>
       <div class="header">
-      <div style="margin-left: 30px;margin-top: 5px;">
-        <img src="html/moneymind.png" alt="Money Mind Logo" width="300px">
-      </div>
-        <div class="navbar">
-            <ul>
+         <div class="logo" style="margin-top: 60px;">
+           <img src="html/moneymind2.png" alt="Money Mind Logo" width="350px">
+         </div>
+         <div class="navbar">
+            <button class="menu-toggle">Menu</button>
+            <ul class="menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#privacy-policy">Privacy Policy</a></li>
                 <li><a href="#about-us">About Us</a></li>
                 <li><a href="#contact-us">Contact Us</a></li>
             </ul>
           </div>
-          </div>
+      </div>
     </header>
+    <hr>
 
-    <section id="home" class="hero-section">
+    <section class="hero-section">
         <div>
             <h2>Track Your Spending Effortlessly</h2>
             <p>Monitor, analyze, and take control of your finances with ease.</p>
-      
-            <button class="cta-btn" onclick="window.location.href='/signin'">Start Tracking</button>
+            <button class="cta-btn">Start Tracking</button>
         </div>
     </section>
+
 
     <section class="features">
         <h3>Why Use Expense Tracker?</h3>
@@ -177,25 +219,31 @@
             </div>
         </div>
     </section>
+    <hr>
 
     <section id="privacy-policy" class="footer">
         <h3>Privacy Policy</h3>
         <p>Your data is safe with us. We respect your privacy and do not share your information with third parties.</p>
     </section>
+    <hr>
 
     <section id="about-us" class="footer">
         <h3>About Us</h3>
         <p>Expense Tracker is dedicated to helping you manage your finances with ease. Our mission is to make budgeting stress-free.</p>
     </section>
-
+<hr>
     <section id="contact-us" class="footer">
         <h3>Contact Us</h3>
         <p>If you have any questions, feel free to <a href="mailto:support@expensetracker.com">contact us</a>.</p>
     </section>
-
+<hr>
     <footer class="footer">
         <p>&copy; 2024 Expense Tracker. All rights reserved.</p>
     </footer>
-
+<script>
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+    document.querySelector('.navbar').classList.toggle('active');
+});
+</script>
 </body>
 </html>
