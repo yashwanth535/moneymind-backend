@@ -4,26 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Money Mind</title>
-  <link rel="stylesheet" href="../register.css">
+  <link rel="stylesheet" href="../signup.css">
 </head>
 <body>
   <h1>Money Mind</h1>
   <h3>Track your expenses</h3>
-  <form id="registerForm">
+  <form id="signupForm">
     <input placeholder="Email" name="email" type="text" id="email" required>
     <br>
     <input placeholder="Password" name="password" type="password" id="password" required>
     <br>
     <input class="sub" type="submit" value="Signup">
     <h3>Already have an account?</h3>
-    <button class="sub" onclick="window.location.href='/login'">Signin</button>
+    <button class="sub" onclick="window.location.href='/signin'">Signin</button>
   </form>
   
   <!-- Placeholder for error/success messages -->
   <div id="message" style="color: red;"></div>
 
   <script>
-   async function registerUser(event) {
+   async function signupUser(event) {
   event.preventDefault(); // Prevent form submission
 
   const email = document.getElementById('email').value;
@@ -35,7 +35,7 @@
 
   // Send registration request to the server
   try {
-    const response = await fetch('/register', {
+    const response = await fetch('/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -67,7 +67,7 @@
 }
 
 // Attach the event listener to the form
-document.getElementById('registerForm').addEventListener('submit', registerUser);
+document.getElementById('signupForm').addEventListener('submit', signupUser);
 
   </script>
   </body>

@@ -6,12 +6,12 @@ const { comparePassword } = require('../middleware/bcrypt');
 
 
 router.get('/', (req, res) => {
-  res.render('login'); // Render the 'login.hbs' file located in the 'template' folder
+  res.render('signin'); // Render the 'signin.hbs' file located in the 'template' folder
 });
 
 
 router.post('/', async (req, res) => {
-    console.log("entered login route");
+    console.log("entered signin route");
     const { email, password } = req.body;
 
     try {
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
             res.json({ success: false, message: "Can't find email" });
         }
     } catch (err) {
-        console.error('Error during login:', err);
+        console.error('Error during signin:', err);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });

@@ -7,7 +7,22 @@ function isAuthenticated(req, res, next) {
   } else {
     // User is not authenticated, redirect to login page
     console.log("no authenticated");
-    res.send("Unauthorized please login");
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>UNAUTHOURIZED</title>
+      </head>
+      <body>
+          <p style="display:inline-block;">Unauthorized, Please <a href='/signin'">signin</a><p>
+          
+      </body>
+      </html>
+  `);
+
+    
     
   }
 }

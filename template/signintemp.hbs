@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Mind</title>
+    <link rel="stylesheet" href="../signin.css">
+</head>
+<body>
+    <h1>Money Mind</h1>
+    <h3>Track your expenses</h3>
+    <form id="signinform">
+        <input placeholder="Email" name="email" type="text" id="email" required>
+        <br>
+        <input placeholder="Password" name="password" type="password" id="password" required>
+        <br>
+        <input class="sub" type="submit" value="Signin">
+        <p id="message"></p>
+        <h3>don't have an account?</h3>
+        <button class="sub" onclick="window.location.href='/signup'">Signup</button>
+    </form>
+
+    <script>
+        async function signinUser(event) {
+            event.preventDefault(); // Prevent form submission
+            console.log("enterd");
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    // Store email in local storage
+                    console.log("successul");
+                    sessionStorage.setItem('email', data.email);
+                    console.log('Email stored in local storage:', data.email);
+                    // Redirect to home or show a success message
+                    window.location.href = '/home'; // Example redirect
+                } else {
+                    document.getElementById('message').innerHTML=data.message;
+                    console.log('signin failed:', data.message);
+                    // Show error message to the user
+                }
+            } catch (error) {
+                console.error('Error during signin:', error);
+                // Handle fetch error
+            }
+        }
+
+        document.getElementById('signinform').addEventListener('submit', signinUser);
+    </script>
+
+</body>
+</html>

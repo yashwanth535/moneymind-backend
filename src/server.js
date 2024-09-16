@@ -1,20 +1,22 @@
 const {  configureApp } = require("../src/middleware/appConfig");
 const isAuthenticated = require("../src/middleware/isAuthenticated")
-const loginRoutes = require("./routes/login");
-const registerRoutes = require("./routes/register");
+const signinRoutes = require("./routes/signin");
+const signupRoutes = require("./routes/signup");
 const addExpenseRoutes = require("./routes/addExpense")
 const fetchExpenseRoutes = require("./routes/fetchExpense")
 const homeRoutes =require("./routes/home")
 const logoutRoutes=require("./routes/logout");
+const landingRoutes=require("./routes/landing");
 
 const app = configureApp();
 
 
 
-// Use the login router for login-related routes
-app.use("/", loginRoutes);
-app.use("/login", loginRoutes);
-app.use("/register",registerRoutes);
+
+app.use("/", landingRoutes);
+// app.use("/landing", landingRoutes);
+app.use("/signin", signinRoutes);
+app.use("/signup",signupRoutes);
 app.use("/home",isAuthenticated,homeRoutes);
 app.use("/add-expense",isAuthenticated,addExpenseRoutes);
 app.use("/fetch-expenses",isAuthenticated,fetchExpenseRoutes);

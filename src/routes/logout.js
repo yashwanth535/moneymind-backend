@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
       if (err) {
           return res.status(500).json({ message: 'Logout failed' });
       }
-      res.redirect('/login');
+      res.redirect('/');
   });
 });
 
