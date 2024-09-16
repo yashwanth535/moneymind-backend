@@ -1,4 +1,5 @@
-const { isAuthenticated, configureApp } = require("../src/middleware/appConfig");
+const {  configureApp } = require("../src/middleware/appConfig");
+const isAuthenticated = require("../src/middleware/isAuthenticated")
 const loginRoutes = require("./routes/login");
 const registerRoutes = require("./routes/register");
 const addExpenseRoutes = require("./routes/addExpense")
