@@ -14,7 +14,6 @@ const app = configureApp();
 
 
 app.use("/", landingRoutes);
-// app.use("/landing", landingRoutes);
 app.use("/signin", signinRoutes);
 app.use("/signup",signupRoutes);
 app.use("/home",isAuthenticated,homeRoutes);

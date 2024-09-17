@@ -42,10 +42,9 @@
     {{> features}}
     {{> footer}}
 <script>
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-    document.querySelector('.navbar').classList.toggle('active');
-});
+
 async function signinUser(event) {
+    console.log("entered into login");
             event.preventDefault(); // Prevent form submission
             console.log("enterd");
             const email = document.getElementById('email').value;

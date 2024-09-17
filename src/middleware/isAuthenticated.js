@@ -2,7 +2,7 @@
 function isAuthenticated(req, res, next) {
   // Check if user is authenticated
   if (req.session && (req.session.user) ){
-    console.log("Authenticated");
+    console.log("Authenticated for");
     return next(); // User is authenticated, proceed to the route
   } else {
     // User is not authenticated, redirect to login page

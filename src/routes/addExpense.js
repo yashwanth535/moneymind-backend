@@ -4,6 +4,7 @@ const User = require("../models/User"); // Import User model here
 const getExpenseModel = require("../models/expense");
 
 router.get('/',(req,res)=>{
+  console.log("add expene rendering");
   res.render('addExpense');
 });
 

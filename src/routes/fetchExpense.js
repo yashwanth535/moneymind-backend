@@ -5,7 +5,7 @@ const getExpenseModel = require("../models/expense");
 
 
 router.get('/',(req,res)=>{
-    console.log("in fetch expense");
+    console.log("fetch expense rendering");
     res.render('fetchExpense');
   });
 

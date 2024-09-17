@@ -6,12 +6,14 @@ const { hashPassword } = require('../middleware/bcrypt');
 
 // Route to render the registration form
 router.get('/', (req, res) => {
+  console.log("signup rendering");
   res.render('signup'); // Renders the 'signup.hbs' template
 });
 
 
 
 router.post('/', async (req, res) => {
+  console.log("in signup POST read");
   const { email, password } = req.body;
 
   try {
@@ -30,7 +32,9 @@ router.post('/', async (req, res) => {
     const newUser = new User({ email: email, pass: hashedPassword });
     await newUser.save();
     req.session.user = { email: newUser.email };
-   console.log('Created the session user in signup' + req.session.user);
+
+   console.log('Created the session user ' + JSON.stringify(req.session.user));
+
     // Send a success message
     res.json({ email: newUser.email,message: 'Registration successful, please login' });
 

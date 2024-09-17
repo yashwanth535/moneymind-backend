@@ -34,13 +34,8 @@ const configureApp = () => {
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set secure: true if using HTTPS
+    cookie: { secure: false } 
 }));
-
-// appConfig.js
-
-// Middleware to check if the user is authenticated
-
 
 
   

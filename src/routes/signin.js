@@ -6,12 +6,13 @@ const { comparePassword } = require('../middleware/bcrypt');
 
 
 router.get('/', (req, res) => {
+    console.log("signin rendering");
   res.render('signin'); // Render the 'signin.hbs' file located in the 'template' folder
 });
 
 
 router.post('/', async (req, res) => {
-    console.log("entered signin route");
+    console.log("entered signin POST form read");
     const { email, password } = req.body;
 
     try {
@@ -24,7 +25,8 @@ router.post('/', async (req, res) => {
 
             if (isMatch) {
                 req.session.user = { email: user.email };
-                console.log('Created the session user ' + req.session.user);
+                console.log('Created the session user ' + JSON.stringify(req.session.user));
+
 
                 res.json({ success: true, email: user.email });
             } else {
