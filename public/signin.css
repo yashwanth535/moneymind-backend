@@ -3,14 +3,16 @@
 
 
 .sub{
-  background-color:rgb(52, 212, 223);
+  background-color: #ff6347;
   cursor: pointer;
   border:solid;
   border-width: 1px;
-  border-radius:3px;
+  border-radius:5px;
+  color:white;
+  width:70px;
 }
 .sub:hover{
-  background-color:rgb(25, 221, 235);
+  background-color: #ff4500;
 }
 
 input{
@@ -22,14 +24,16 @@ input{
   border:solid;
   border-width: 1px;
 }
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
+  
 }
 
 form {
+  margin-top: 160px;
   text-align: center;
   border: solid 1.5px;
   border-radius: 20px;
