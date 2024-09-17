@@ -5,7 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Money Mind</title>
-    <link rel="stylesheet" href="landing.css">
+    <style>
+        *{
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        header{
+                
+                 background-color: black;
+                 
+        } 
+        .header{
+                    margin-top: 10px;
+                    background-color: white;
+                    display:flex;
+                    height:60px;
+                    justify-content: space-between;
+                align-items: center;
+                
+                
+                   
+             }
+             .navbar {
+
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar ul{
+    list-style: none;
+    display: flex;
+    text-decoration: none;
+   
+}
+
+.navbar ul li a{
+    margin: 0 20px;
+    color:black;
+
+    text-decoration: none;
+}
+        .navbar ul li a:hover {
+            text-shadow: #000000;
+            text-decoration: underline;
+        }
+        .menu-toggle {
+    display: none;
+    background-color: #000000;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+
+}
+
+        .hero-section {
+           
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            color:black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .hero-section h2 {
+            font-size: 3em;
+            /* color: #ffcb05; */
+            color:black;
+        }
+        .hero-section p {
+            color:black;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .cta-btn {
+            background-color: #ff6347;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cta-btn:hover {
+            background-color: #ff4500;
+        }
+        .features {
+            padding: 50px 0;
+            text-align: center;
+        }
+        .features h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .feature-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .feature-card {
+            background-color: #ebe4e4;
+            color:black;
+            width: 30%;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            border:solid;
+            border-width:1px;
+            box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+        }
+        .feature-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: black;
+        }
+
+
+        .footer {
+            background-color: #ebe4e4;
+            color: rgb(0, 0, 0);
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #000000;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #000000;
+        }
+        /* Media Queries for responsiveness */
+      @media (max-width: 768px) {
+        .menu-toggle {
+        display: block; /* Show menu button on mobile */
+    }
+    .navbar ul {
+        display: none; /* Initially hidden */
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0; /* Align to the right */
+        height: 80px; /* Full height */
+        width: 150px; /* Adjust width as needed */
+         /* Offset for header */
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%); /* Hidden off-screen to the right */
+    }
+    .navbar li{
+        margin-top: 5px;
+         text-shadow: 0px 0px 20px #000000;
+    
+    }
+
+    .navbar.active ul {
+        margin-top: 70px;
+        display: flex;
+        transform: translateX(0); /* Slide-in effect */
+    }
+     .logo img{
+        width:300px;
+    }
+    .hero-section h2{
+       font-size: 35px;
+    }
+
+    
+}
+
+
+    </style>
 </head>
 <body id="home">
 
