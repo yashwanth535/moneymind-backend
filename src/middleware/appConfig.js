@@ -14,7 +14,7 @@ const configureApp = () => {
 
   // Set views path
   const viewsPath = path.join(__dirname, '../../template')
-  const partialsPath = path.join(__dirname, "../partials");
+  const partialsPath = path.join(__dirname, "../../template/partials");
 
   console.log(viewsPath);
   // Set view engine

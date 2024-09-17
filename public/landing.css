@@ -95,11 +95,7 @@ font-size: 16px;
   padding: 50px 0;
   text-align: center;
 }
-.features h3 {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: black;
-}
+
 .feature-cards {
   display: flex;
   justify-content: space-around;
@@ -107,6 +103,7 @@ font-size: 16px;
 }
 .feature-card {
   background-color: #ebe4e4;
+  text-align: center;
   color:black;
   width: 30%;
   padding: 20px;
@@ -123,7 +120,7 @@ font-size: 16px;
 }
 
 
-.footer {
+.footer{
   background-color: #ebe4e4;
   color: rgb(0, 0, 0);
   padding: 20px 0;
@@ -136,6 +133,8 @@ font-size: 16px;
 .footer a:hover {
   color: #000000;
 }
+
+
 /* Media Queries for responsiveness */
 @media (max-width: 768px) {
 .menu-toggle {

@@ -13,24 +13,10 @@
 </head>
 <body id="home">
 
-    <header>
-      <div class="header">
-         <div class="logo" style="margin-top: 50px;">
-           <img src="html/moneymind2.png" alt="Money Mind Logo" width="250px">
-         </div>
-         <div class="navbar">
-            <button class="menu-toggle">Menu</button>
-            <ul class="menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#privacy-policy">Privacy Policy</a></li>
-                <li><a href="#about-us">About Us</a></li>
-                <li><a href="#contact-us">Contact Us</a></li>
-            </ul>
-          </div>
-      </div>
-      <hr>
-    </header>
     
+    {{> header
+        homeLink="#home" 
+    }}
 
     <section class="hero-section">
         <div>
@@ -41,44 +27,12 @@
     </section>
 
 
-    <section class="features">
-        <h3>Why Use Money Mind?</h3>
-        <div class="feature-cards">
-            <div class="feature-card">
-                <h4>Real-time Monitoring</h4>
-                <p>Track your daily, weekly, and monthly expenses with live updates.</p>
-            </div>
-            <div class="feature-card">
-                <h4>Custom Categories</h4>
-                <p>Personalize your expense categories to match your lifestyle.</p>
-            </div>
-            <div class="feature-card">
-                <h4>Visual Reports</h4>
-                <p>Generate beautiful charts and reports to analyze your spending patterns.</p>
-            </div>
-        </div>
-    </section>
-    <hr>
+{{> features}}
 
-    <section id="privacy-policy" class="footer">
-        <h3>Privacy Policy</h3>
-        <p>Your data is safe with us. We respect your privacy and do not share your information with third parties.</p>
-    </section>
-    <hr>
+ 
 
-    <section id="about-us" class="footer">
-        <h3>About Us</h3>
-        <p>Expense Tracker is dedicated to helping you manage your finances with ease. Our mission is to make budgeting stress-free.</p>
-    </section>
-<hr>
-    <section id="contact-us" class="footer">
-        <h3>Contact Us</h3>
-        <p>If you have any questions, feel free to <a href="mailto:support@expensetracker.com">contact us</a>.</p>
-    </section>
-<hr>
-    <footer class="footer">
-        <p>&copy; 2024 Expense Tracker. All rights reserved.</p>
-    </footer>
+{{> footer}}
+    
 <script>
     document.querySelector('.menu-toggle').addEventListener('click', function() {
     document.querySelector('.navbar').classList.toggle('active');
