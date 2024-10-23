@@ -4,83 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
     <style>
-        /* Simple styling for the form */
-        form {
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+       #dashBoard {
+            max-width: 600px; /* Limit the width of the dashboard */
+            margin: 20px auto; /* Center the dashboard horizontally */
+            padding: 20px; /* Add padding inside the dashboard */
+            background-color: #fff; /* White background for contrast */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .form-group button {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        td {
-            background-color: #f9f9f9;
-        }
-        
+
     </style>
 </head>
-<body id="body" style="display:none;">
+<body onload="retrieveDashBoard()">
     <h1>IN HOME</h1>
-    <button onclick="window.location.href='/add-expense'">add expense</button>
-    <button onclick="window.location.href='/fetch-expenses'">show expense</button>
-  
-
-
+    <div id="dashBoard">
+        <h2>Dashboard Overview</h2>
+        <p id="totalExpenses">Total Expenses: $0</p> <!-- Total expenses display -->
+        <h3>Expense Trend Chart</h3>
+        <canvas id="expenseChart" width="400" height="200"></canvas> <!-- Canvas for the chart -->
+    </div>
+    <button onclick="window.location.href='/add-expense'">Add Expense</button>
+    <button onclick="window.location.href='/fetch-expenses'">Show Expense</button>
+    <button onclick="window.location.href='/logout'">Logout</button>
     
-     <button onclick="window.location.href='/logout'">Logout</button>
-
-
-
-  
-
     <script>
-        window.onload = function() {
+        async function retrieveDashBoard() {
             const email = sessionStorage.getItem('email');
-            if (email) {
-                document.getElementById("body").style.display = "block";
-            } 
-        };
 
-        
+            try {
+                const response = await fetch(`/dashboard?email=${encodeURIComponent(email)}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update the total expenses
+                    document.getElementById('totalExpenses').innerHTML = `Total Expenses: $${data.total}`;
+                    
+                    // Render the expense trend chart
+                    renderExpenseChart(data.expenseTrend);
+                } else {
+                    alert('Error fetching dashboard data');
+                }
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        }
 
+        function renderExpenseChart(expenseTrend) {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            
+            // Prepare data for the chart
+            const labels = expenseTrend.map(item => item._id); // Assuming expenseTrend has date strings in _id
+            const amounts = expenseTrend.map(item => item.total); // Assuming total is stored in total
+
+            // Create the chart
+            new Chart(ctx, {
+                type: 'line', // Change to 'bar', 'pie', etc. as needed
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses Over Time',
+                        data: amounts,
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount'
+                            }
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

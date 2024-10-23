@@ -29,10 +29,6 @@ const configureApp = () => {
     cookie: { secure: false } 
 }));
 
-
-  
- 
-
   return app;
 };
 

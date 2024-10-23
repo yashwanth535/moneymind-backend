@@ -25,10 +25,11 @@
         }
     </style>
 </head>
-<body id="body" style="display:none;">
+<body>
     <h1>FETCH EXPENSE</h1>
     <button onclick="window.location.href='/logout'">Logout</button>
     <button onclick="window.location.href='/home'">Home</button>
+
     <div id="expense-list" style="display:block;">
         <table>
             <thead>
@@ -43,31 +44,23 @@
                 <!-- Table rows will be inserted here -->
             </tbody>
         </table>
+        
     </div>
 
     
 
     <script>
-        window.onload = async function() {
-            console.log("fetch expense on load triggered");
-            const email = sessionStorage.getItem('email');
-            if (email) {
-                console.log("body is shown");
-                document.getElementById("body").style.display = "block";
-                await fetchExpenses();  // Automatically fetch expenses on page load
-            }
-        };
-
-        // Function to fetch expenses
-        async function fetchExpenses() {
-            try {
+   window.onload = async function() {
+    const email = sessionStorage.getItem('email');
+    
+    try {
                 const userEmail = sessionStorage.getItem('email'); // Retrieve the email from session storage
 
                 const response = await fetch(`/fetch-expenses/fetchdata?email=${encodeURIComponent(userEmail)}`);
-                document.getElementById('expense-list').style.display = "block";
-
                 if (response.ok) {
                     const expenses = await response.json();
+                    console.log(expenses);
+
                     const tbody = document.getElementById('expense-tbody');
                     tbody.innerHTML = ''; // Clear existing rows
 

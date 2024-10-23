@@ -22,6 +22,7 @@ router.get('/fetchdata', async (req, res) => {
       const Expense = getExpenseModel(email); // Dynamically get the expense model for this user
 
       const expenses = await Expense.find(); // Fetch all expenses for this user
+      // console.log('Fetched expenses:', expenses);
       res.status(200).json(expenses);
   } catch (err) {
       console.error('Error fetching expenses:', err);
