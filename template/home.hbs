@@ -5,31 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
-    <style>
-       #dashBoard {
-            max-width: 600px; /* Limit the width of the dashboard */
-            margin: 20px auto; /* Center the dashboard horizontally */
-            padding: 20px; /* Add padding inside the dashboard */
-            background-color: #fff; /* White background for contrast */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-        }
-
-    </style>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body onload="retrieveDashBoard()">
-    <h1>IN HOME</h1>
+     
+    {{> homeHeader
+        homeLink="/home" 
+    }}
+
+    <!-- Profile button container -->
+    <div id="profileButtonContainer">
+        <div id="profile">
+            <p class="profile-info">My GPTs</p>
+            <p class="profile-info">Customize ChatGPT</p>
+            <p class="profile-info">Settings</p>
+            <p class="profile-info">Upgrade Plan</p>
+            <p class="profile-info" onclick="window.location.href='/logout' ">Log out</p>
+        </div>
+    </div>
+
+    <!-- Dashboard section -->
     <div id="dashBoard">
         <h2>Dashboard Overview</h2>
-        <p id="totalExpenses">Total Expenses: $0</p> <!-- Total expenses display -->
+        <p id="totalExpenses">Total Expenses: 0/-</p>
         <h3>Expense Trend Chart</h3>
-        <canvas id="expenseChart" width="400" height="200"></canvas> <!-- Canvas for the chart -->
+        <canvas id="expenseChart" width="400" height="200"></canvas> 
     </div>
-    <button onclick="window.location.href='/add-expense'">Add Expense</button>
-    <button onclick="window.location.href='/fetch-expenses'">Show Expense</button>
-    <button onclick="window.location.href='/logout'">Logout</button>
-    
+
     <script>
+        // Function to toggle profile dropdown display
+        function showProfile() {
+            const profileDiv = document.getElementById('profile');
+            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
+        }
         async function retrieveDashBoard() {
             const email = sessionStorage.getItem('email');
 
@@ -91,6 +99,8 @@
                 }
             });
         }
+    
+    
     </script>
 </body>
 </html>

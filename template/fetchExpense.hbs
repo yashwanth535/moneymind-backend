@@ -24,11 +24,22 @@
             background-color: #f9f9f9;
         }
     </style>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <h1>FETCH EXPENSE</h1>
-    <button onclick="window.location.href='/logout'">Logout</button>
-    <button onclick="window.location.href='/home'">Home</button>
+   {{> homeHeader
+        homeLink="/home" 
+    }}
+
+    <div id="profileButtonContainer">
+        <div id="profile">
+            <p class="profile-info">My GPTs</p>
+            <p class="profile-info">Customize ChatGPT</p>
+            <p class="profile-info">Settings</p>
+            <p class="profile-info">Upgrade Plan</p>
+            <p class="profile-info" onclick="window.location.href='/logout' ">Log out</p>
+        </div>
+    </div>
 
     <div id="expense-list" style="display:block;">
         <table>
@@ -50,6 +61,17 @@
     
 
     <script>
+           function showProfile() {
+            const profileDiv = document.getElementById('profile');
+            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
+        }
+        window.onload = function() {
+            const email = sessionStorage.getItem('email');
+            if (email) {
+                document.getElementById("body").style.display = "block";
+            } 
+        };
+ 
    window.onload = async function() {
     const email = sessionStorage.getItem('email');
     

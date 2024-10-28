@@ -4,64 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Expense</title>
-    <style>
-        /* Simple styling for the form */
-        form {
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .form-group button {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        td {
-            background-color: #f9f9f9;
-        }
-        
-    </style>
+      <link rel="stylesheet" href="addExpense.css">
+   
+  
 </head>
 <body>
-    <h1>Add Expense</h1>
-    <button onclick="window.location.href='/logout'">Logout</button>
-    <button onclick="window.location.href='/home'">home</button>
+     <div id="profileButtonContainer">
+        <div id="profile">
+            <p class="profile-info">My GPTs</p>
+            <p class="profile-info">Customize ChatGPT</p>
+            <p class="profile-info">Settings</p>
+            <p class="profile-info">Upgrade Plan</p>
+            <p class="profile-info" onclick="window.location.href='/logout' ">Log out</p>
+        </div>
+    </div>
 
+
+    <div class="flex">
+        <div class="headerClass">
+    {{> homeHeader
+        homeLink="/home" 
+    }}
+</div>
+<div class="formDiv">
     <form id="expenseForm" style="display:block;">
         <div class="form-group">
             <label for="amount">Amount:</label>
@@ -83,13 +48,17 @@
         <p id="message"></p>
     </form>
     
-     
-
+     </div>
+</div>
 
 
   
 
     <script>
+        function showProfile() {
+            const profileDiv = document.getElementById('profile');
+            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
+        }
         window.onload = function() {
             const email = sessionStorage.getItem('email');
             if (email) {
