@@ -22,13 +22,15 @@ const configureApp = () => {
 
 
 
-   app.use(session({
-    secret: 'your_secret_key',
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_secret_key', // Use a secure key from environment variable
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } 
-}));
-
+    saveUninitialized: false, // Avoid creating session for unauthenticated users
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+      maxAge: 1000 * 60 * 60 * 24 // 1 day expiration
+    }
+  }));
   return app;
 };
 
