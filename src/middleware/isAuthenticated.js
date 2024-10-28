@@ -1,6 +1,8 @@
 // middleware/isAuthenticated.js
 function isAuthenticated(req, res, next) {
   // Check if user is authenticated
+  console.log("inside authentication:");
+  console.log('user' + JSON.stringify(req.session.user));
   if (req.session && (req.session.user) ){
     console.log("Authenticated for");
     return next();
