@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require("express");
 const hbs = require("hbs");
 const path = require("path");
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const session = require('express-session')
 const mongoose = require('mongoose');
-
+const MongoStore = require('connect-mongo');
 const configureApp = () => {
   const app = express();
 
@@ -13,20 +12,24 @@ const configureApp = () => {
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-  // Configure session middleware
+  app.set("trust proxy", 1);
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'your_random_secure_string', // Use a strong secret
+    secret: process.env.SESSION_SECRET || 'sldkfjsdhkjsdh23498uasjdhf', // Use a strong secret
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({
-      mongoUrl: process.env.MONGODB_URI, // Use the mongoUrl option
-      collectionName: 'sessions' // Optional: specify collection name
+      mongoUrl: process.env.MONGODB_URI,
+      ttl: 15 * 24 * 60 * 60, // Session expiration time in seconds (15 days)
+      autoRemove: 'interval',
+      autoRemoveInterval: 15 // Minutes
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production' // Use secure cookies in production
+      secure: true, // Only use secure cookies in production
+      sameSite: 'none', // Required for cookies to work cross-site in secure contexts
+      maxAge: 15 * 24 * 60 * 60 * 1000 // Set cookie expiration time (15 days)
     }
   }));
-
+  
   const viewsPath = path.join(__dirname, '../../template');
   const partialsPath = path.join(__dirname, "../../template/partials");
 
