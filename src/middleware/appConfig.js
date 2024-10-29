@@ -13,8 +13,9 @@ const configureApp = () => {
   .catch(err => console.error('MongoDB connection error:', err));
 
   app.set("trust proxy", 1);
+
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'sldkfjsdhkjsdh23498uasjdhf', // Use a strong secret
+    secret: process.env.SESSION_SECRET || 'sldkfjsdhkjsdh23498uasjdhf', 
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({
@@ -24,8 +25,8 @@ const configureApp = () => {
       autoRemoveInterval: 15 // Minutes
     }),
     cookie: {
-      secure: true, // Only use secure cookies in production
-      sameSite: 'none', // Required for cookies to work cross-site in secure contexts
+      secure: process.env.NODE_ENV === 'production', // Set to true in production
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 15 * 24 * 60 * 60 * 1000 // Set cookie expiration time (15 days)
     }
   }));
@@ -40,10 +41,6 @@ const configureApp = () => {
   app.use(express.static(path.join(__dirname, '../../public')));
   app.use(express.json()); // Used when parsing JSON in client side
   app.use(express.urlencoded({ extended: true })); // Used when reading directly from form
-
-
-  // Connect to MongoDB
-  
 
   return app;
 };
