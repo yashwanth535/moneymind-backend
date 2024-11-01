@@ -7,12 +7,9 @@ const fetchExpenseRoutes = require("./src/routes/fetchExpense")
 const homeRoutes =require("./src/routes/home")
 const logoutRoutes=require("./src/routes/logout");
 const landingRoutes=require("./src/routes/landing");
-
 const getExpenseModel = require("./src/models/expense");
 
 const app = configureApp();
-
-
 
 
 app.use("/", landingRoutes);

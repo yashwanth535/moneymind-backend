@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 console.log(viewsPath);
 
 app.get('/',(req,res)=>{
-  res.render('addExpense');
+  res.render('signin');
 });
 
 const PORT = 3000;

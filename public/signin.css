@@ -1,31 +1,29 @@
-
-
-
-
 .sub{
-  background-color: #ff6347;
+  background-color: #1b41e9;
   cursor: pointer;
-  border:solid;
-  border-width: 1px;
-  border-radius:5px;
   color:white;
-  width:70px;
+  width:280px;
+  height:40px;
+  border-radius: 30px;
+  border:solid;
 }
+ 
 .sub:hover{
-  background-color: #ff4500;
+  background-color: #4863de;
 }
 
 input{
-  font-size: 1rem;
-  width: 300px;
+  width: 270px;
   padding: 6px 2px; 
+  height:23px;
   margin: 10px 0 10px 0;
-  border-radius: 5px;
   border:solid;
-  border-width: 1px;
+  border-radius: 4px;
+  border-width: 1.5px;
 }
 
 .container {
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,9 +31,8 @@ input{
 }
 
 form {
+  width: 270px;
   margin-top: 160px;
-  text-align: center;
-  border: solid 1.5px;
-  border-radius: 20px;
   padding: 20px;
+  box-shadow: 1px 1px 8px rgb(205, 201, 201);
 }
