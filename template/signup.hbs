@@ -15,78 +15,170 @@
   <form id="signupForm">
     <h2>Signup to MoneyMind</h2>
     <p>Track smart,spend wisely</p>
-    <input placeholder="Email" name="email" type="text" id="email" required>
+    <input placeholder="Email" name="email" type="text" id="email"required>
     <br>
-    <input placeholder="Password" name="password" type="password" id="password" required>
-    <br>
-    <input class="sub" type="submit" value="Signup">
+    <div style="position: relative; display: inline-block;">
+    <input
+        placeholder="Password"
+        name="password"
+        type="password"
+        id="password"
+        required
+        style="padding-right: 4px;" 
+    >
+    <button type="button" onclick="togglePassword()" id="toggleButton">
+        Show
+    </button>
+</div>
+    <input class="sub" type="submit" value="generate OTP">
+    <p id="wait" style="display:none;">wait for 5 seconds to get otp</p>
     <p id="message"></p>
     <p style="display: inline;">Already have an account?</p>
     <a href="/signin">Signin</a>
   </form>
   
+
+
+  <form id="otpForm" style="display:none;">
+    <h2>Enter your otp</h2>
+     <p>OTP has been sent to the given email address</p>
+    <input placeholder="Enter otp" name="otp" type="text" id="otp" required>
+    <br>
+    <input class="sub" type="submit" value="verify otp">
+    <p id="otpmessage"></p>
+  </form>
+  
   </div>
-  
-
-  
-
 
   {{>features}}
   {{>footer}}
 
   <script>
 
-
-   async function signupUser(event) {
-  event.preventDefault(); // Prevent form submission
-
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const messageDiv = document.getElementById('message');
-
-  // Clear any previous messages
-  messageDiv.textContent = '';
-
-  // Send registration request to the server
-  try {
-    const response = await fetch('/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
-
-    const data = await response.json();
-
-    if (response.status === 400) {
-      // Display the message on the registration page
-      messageDiv.textContent = data.message;
-    } 
+    function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleButton = event.target; // The clicked button
     
-    else if (response.status === 200) {
-      // Display success message
-     sessionStorage.setItem('email', data.email);
-    console.log('Email stored in local storage:', data.email);
-     window.location.href = '/home';
-     
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.textContent = "Hide";
     } else {
-      // Handle other errors
-      messageDiv.textContent = 'An error occurred. Please try again.';
+        passwordInput.type = "password";
+        toggleButton.textContent = "Show";
     }
-  } catch (error) {
-    console.error('Error during registration:', error);
-    messageDiv.textContent = 'An unexpected error occurred. Please try again.';
-  }
+}
+ 
+document.getElementById('otpForm').addEventListener('submit', verifyOTP);
+
+async function verifyOTP(event) {
+      event.preventDefault(); // Prevent form submission
+
+      try {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const messageDiv = document.getElementById('message');
+        const otpval = document.getElementById('otp').value;
+
+        // First, verify the OTP
+        const response = await fetch('/signup/verifyOTP', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ otpval })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 400) {
+          document.getElementById('otpmessage').textContent = data.message;
+        } else if (response.status === 200) {
+          const response2 = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data2 = await response2.json();
+
+          if (response2.status === 400) {
+            messageDiv.textContent = data2.message;
+          } else if (response2.status === 200) {
+            window.location.href = '/home';
+          } else {
+            messageDiv.textContent = 'An error occurred. Please try again.';
+          }
+        }
+      } catch (error) {
+        console.error('Error during OTP verification or registration:', error);
+        const messageDiv = document.getElementById('message');
+        if (messageDiv) {
+          messageDiv.textContent = 'An unexpected error occurred. Please try again.';
+        }
+      }
 }
 
-// Attach the event listener to the form
-document.getElementById('signupForm').addEventListener('submit', signupUser);
 
-  </script>
-  </body>
+ 
+
+  
+
+document.getElementById('signupForm').addEventListener('submit', generateOTP);
+async function generateOTP(event) {
+          event.preventDefault(); 
+          console.log("generate otp function");
+
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const messageDiv = document.getElementById('message'); // Define messageDiv if not defined already
+
+          // Check if user exists
+          const response1 = await fetch('/signup/userExists', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+          });
+
+          const data1 = await response1.json();
+
+          if (response1.status === 400) {
+            messageDiv.textContent = data1.message;
+          } 
+          
+          
+          
+          else if (response1.status === 200) {
+            document.getElementById('wait').style.display = 'block';
+            messageDiv.style.display = 'none';
+
+            const response2 = await fetch('/signup/generateOTP', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email, password })
+            });
+
+            const data2 = await response2.json();
+
+            if (response2.status === 400) {
+              console.log('status is 400');
+              messageDiv.textContent = data2.message;
+            } else if (response2.status === 200) {
+              console.log("status is 200");
+              const otpForm = document.getElementById('otpForm');
+              const signupForm = document.getElementById('signupForm');
+              otpForm.style.display = 'block';
+              signupForm.style.display = 'none';
+            }
+          }
+}
+
+
+</script>
+</body>
 </html>
-
-
-
-

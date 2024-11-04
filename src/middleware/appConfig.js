@@ -20,9 +20,9 @@ const configureApp = () => {
     saveUninitialized: false,
     store: new MongoStore({
       mongoUrl: process.env.MONGODB_URI,
-      ttl: 15 * 24 * 60 * 60, // Session expiration time in seconds (15 days)
+      ttl: 15 * 24 * 60 * 60, 
       autoRemove: 'interval',
-      autoRemoveInterval: 15 // Minutes
+      autoRemoveInterval: 15 
     }),
     cookie: {
       secure: process.env.NODE_ENV === 'production', // Set to true in production

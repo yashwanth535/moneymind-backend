@@ -3,11 +3,11 @@ const hbs=require('hbs');
 const path=require("path");
 const app=express();
 app.set("view engine","hbs");
-const viewsPath = path.join(__dirname, '/template')
+const viewsPath = path.join(__dirname, '../template')
 app.set("views",viewsPath);
-const partialsPath = path.join(__dirname, "/template/partials");
+const partialsPath = path.join(__dirname, "../template/partials");
 hbs.registerPartials(partialsPath);
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '../public')));
 console.log(viewsPath);
 
 app.get('/',(req,res)=>{

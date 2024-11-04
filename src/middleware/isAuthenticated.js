@@ -1,31 +1,16 @@
 // middleware/isAuthenticated.js
+
 function isAuthenticated(req, res, next) {
   // Check if user is authenticated
-  console.log("inside authentication:");
-  console.log('user' + JSON.stringify(req.session.user));
-  if (req.session && (req.session.user) ){
-    console.log("Authenticated for");
+  console.log("Inside authentication check:");
+  console.log("User session data:", JSON.stringify(req.session.user));
+  
+  if (req.session.user) {
+    console.log("User is authenticated.");
     return next();
   } else {
-    // User is not authenticated, redirect to login page
-    console.log("no authenticated");
-    res.send(`
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>UNAUTHOURIZED</title>
-      </head>
-      <body>
-          <p style="display:inline-block;">Unauthorized, Please <a href='/signin'">signin</a><p>
-          
-      </body>
-      </html>
-  `);
-
-    
-    
+    console.log("User is not authenticated. Redirecting to home.");
+    return res.render('home'); // This will render the home page if the user is not authenticated.
   }
 }
 

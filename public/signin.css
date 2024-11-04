@@ -36,3 +36,16 @@ form {
   padding: 20px;
   box-shadow: 1px 1px 8px rgb(205, 201, 201);
 }
+
+#toggleButton{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  color: #333;
+}

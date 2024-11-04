@@ -24,12 +24,14 @@
             <p>stay updated on your expenses</p>
             <input placeholder="Email" name="email" type="text" id="email" required>
             <br>
-            <input placeholder="Password" name="password" type="password" id="password" required>
-            <br>
+            <div style="position: relative; display: inline-block;">
+                <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+                <button type="button" onclick="togglePassword()" id="toggleButton">Show</button>
+            </div>
             <input class="sub" type="submit" value="Signup">
             <p id="message"></p>
             <p style="display: inline;">don't have an account?</p>
-            <a href="/signup">Signup</a>
+            <a href="/signup">signin</a>
         </form>
     </div>
 
@@ -38,11 +40,21 @@
     {{> features}}
     {{> footer}}
 <script>
-
+function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleButton = event.target; // The clicked button
+    
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.textContent = "Hide";
+    } else {
+        passwordInput.type = "password";
+        toggleButton.textContent = "Show";
+    }
+}
+document.getElementById('signinform').addEventListener('submit', signinUser);
 async function signinUser(event) {
-    console.log("entered into login");
-            event.preventDefault(); // Prevent form submission
-            console.log("enterd");
+            event.preventDefault(); 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -56,27 +68,18 @@ async function signinUser(event) {
                 });
 
                 const data = await response.json();
-                console.log('Response data:', data);
                 
                 if (data.success) {
-                    // Store email in local storage
-                    console.log("successul");
-                    sessionStorage.setItem('email', data.email);
-                    console.log('Email stored in local storage:', data.email);
-                    // Redirect to home or show a success message
-                    window.location.href = '/home'; // Example redirect
+                    window.location.href = '/home'; 
                 } else {
                     document.getElementById('message').innerHTML=data.message;
-                    console.log('signin failed:', data.message);
-                    // Show error message to the user
                 }
             } catch (error) {
                 console.error('Error during signin:', error);
-                // Handle fetch error
             }
         }
 
-        document.getElementById('signinform').addEventListener('submit', signinUser);
+        
 </script>
 </body>
 </html>
