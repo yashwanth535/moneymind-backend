@@ -12,7 +12,7 @@ const getExpenseModel = require("./src/models/expense");
 const app = configureApp();
 
 
-app.use("/",isAuthenticated, landingRoutes);
+app.use("/",landingRoutes);
 app.use("/signin", signinRoutes);
 app.use("/signup",signupRoutes);
 app.use("/home",isAuthenticated,homeRoutes);
