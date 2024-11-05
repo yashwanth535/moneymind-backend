@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 const router = express.Router();
 const User = require("../models/User"); // Import User model here
 const { hashPassword } = require('../middleware/bcrypt');
@@ -49,13 +50,13 @@ router.post('/', async (req, res) => {
 router.post('/generateOTP', (req, res) => {
             
             console.log("inside generateotp route");
-            const { email, password } = req.body;
+            const { email} = req.body;
 
             const transporter = nodemailer.createTransport({
               service: 'gmail', // Using Gmail as the email service
               auth: {
-                user: 'verify.moneymind@gmail.com', // Your email address
-                pass: 'bxje idtg heav kkdk', // Your app password
+                user: process.env.user,
+                pass: process.env.pass, 
               },
             });
 
