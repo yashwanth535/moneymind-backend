@@ -13,7 +13,7 @@
             <p class="profile-info">Customize ChatGPT</p>
             <p class="profile-info">Settings</p>
             <p class="profile-info">Upgrade Plan</p>
-            <p class="profile-info" onclick="window.location.href='/logout' ">Log out</p>
+            <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
         </div>
     </div>
 
@@ -57,22 +57,10 @@
             const profileDiv = document.getElementById('profile');
             profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
         }
-        window.onload = function() {
-            const email = sessionStorage.getItem('email');
-            if (email) {
-                document.getElementById("body").style.display = "block";
-            } 
-        };
- 
+       
 
         document.getElementById('expenseForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent form submission
-
-            const email = sessionStorage.getItem('email'); // Retrieve the email from local storage
-            if (!email) {
-                document.getElementById('message').textContent = 'You need to be logged in to add expenses.';
-                return;
-            }
+            event.preventDefault(); 
 
             const amount = document.getElementById('amount').value;
             const date = document.getElementById('date').value;
@@ -85,7 +73,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, amount, date, purpose, modeOfPayment })
+                    body: JSON.stringify({amount, date, purpose, modeOfPayment })
                 });
 
                 const data = await response.json();

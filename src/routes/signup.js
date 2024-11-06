@@ -1,11 +1,11 @@
 const express = require("express");
 require('dotenv').config();
 const router = express.Router();
-const User = require("../models/User"); // Import User model here
+const User = require("../models/User");
 const { hashPassword } = require('../middleware/bcrypt');
 const nodemailer = require('nodemailer');
 
-// Route to render the registration form
+
 router.get('/', (req, res) => {
   console.log("signup rendering");
   res.render('signup');
@@ -13,38 +13,27 @@ router.get('/', (req, res) => {
 
 
 
-router.post('/', async (req, res) => {
-      console.log("in signup POST read");
-      const { email, password } = req.body;
+router.post('/userExists', async (req, res) => {
+  console.log("inside userExists route");
+  const { email} = req.body;
 
-      try {
-        // Check if the user already exists
-        const user = await User.findOne({ email: email });
+  try {
+    // Check if the user already exists
+    const user = await User.findOne({ email: email });
 
-        if (user) {
-          return res.status(400).json({ message: 'User already exists' });
-        }
+    if (user) {
+      console.log("user exists");
+      return res.status(400).json({ message: 'Email is already registered.' });
+    }
+    return res.status(200).json({message:'continue'});
 
-
-        // Hash the password before saving it
-        const hashedPassword = await hashPassword(password);
-
-        // Create a new user with the hashed password
-        const newUser = new User({ email: email, pass: hashedPassword });
-        await newUser.save();
-        req.session.user = { email: newUser.email };
-
-      console.log('Created the session user ' + JSON.stringify(req.session.user));
-
-        // Send a success message
-        res.json({ email: newUser.email,message: 'Registration successful, please login' });
-
-      } catch (err) {
-        console.error('Error during registration:', err);
-        res.status(500).send('Internal Server Error');
-      }
-});
-
+  }
+  catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).send('Internal Server Error');
+  }
+}
+);
 
 
 router.post('/generateOTP', (req, res) => {
@@ -53,7 +42,7 @@ router.post('/generateOTP', (req, res) => {
             const { email} = req.body;
 
             const transporter = nodemailer.createTransport({
-              service: 'gmail', // Using Gmail as the email service
+              service: 'gmail',
               auth: {
                 user: process.env.user,
                 pass: process.env.pass, 
@@ -81,7 +70,8 @@ router.post('/generateOTP', (req, res) => {
             // Send the email
             transporter.sendMail(mailOptions, (error, info) => {
               if (error) {
-                return res.status(400).json({ message: 'Enter the email correctly' });
+                console.log("not success");
+                return res.status(400).json({ message: 'Please enter a valid email address.' });
               }
               console.log("success");
               return res.status(200).json({ message: 'OTP sent successfully' }); // Send a success response
@@ -100,32 +90,43 @@ router.post('/verifyOTP',(req,res)=>{
           }
           else {
             console.log("otp is not correct");
-            res.status(400).json({message : 'otp is incorrect'});
+            res.status(400).json({message : 'The provided OTP is incorrect. Please try again.'});
           }
 });
 
+router.post('/', async (req, res) => {
+  console.log("in signup POST read");
+  const { email, password } = req.body;
 
-router.post('/userExists', async (req, res) => {
-          console.log("inside userExists route");
-          const { email} = req.body;
+  try {
+    // Check if the user already exists
+    const user = await User.findOne({ email: email });
 
-          try {
-            // Check if the user already exists
-            const user = await User.findOne({ email: email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-            if (user) {
-              console.log("user exists");
-              return res.status(400).json({ message: 'User already exists' });
-            }
-            return res.status(200).json({message:'continue'});
 
-          }
-          catch (err) {
-            console.error('Error during registration:', err);
-            res.status(500).send('Internal Server Error');
-          }
-        }
-);
+    // Hash the password before saving it
+    const hashedPassword = await hashPassword(password);
+
+    // Create a new user with the hashed password
+    const newUser = new User({ email: email, pass: hashedPassword });
+    await newUser.save();
+    req.session.user = { email: newUser.email };
+
+  console.log('Created the session user ' + JSON.stringify(req.session.user));
+
+    // Send a success message
+    res.json({ email: newUser.email,message: 'Registration successful, please login' });
+
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 
 module.exports = router;

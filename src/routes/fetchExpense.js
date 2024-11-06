@@ -12,7 +12,7 @@ router.get('/',(req,res)=>{
 
 router.get('/fetchdata', async (req, res) => {
     console.log("in fetch router get funtion");
-  const { email } = req.query; // Fetch email from query parameters
+    const email = req.session.user.email;
 
   if (!email) {
       return res.status(400).json({ error: 'Email is required' });

@@ -37,7 +37,7 @@
             <p class="profile-info">Customize ChatGPT</p>
             <p class="profile-info">Settings</p>
             <p class="profile-info">Upgrade Plan</p>
-            <p class="profile-info" onclick="window.location.href='/logout' ">Log out</p>
+            <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
         </div>
     </div>
 
@@ -65,26 +65,17 @@
             const profileDiv = document.getElementById('profile');
             profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
         }
-        window.onload = function() {
-            const email = sessionStorage.getItem('email');
-            if (email) {
-                document.getElementById("body").style.display = "block";
-            } 
-        };
+      
  
    window.onload = async function() {
-    const email = sessionStorage.getItem('email');
+ 
     
     try {
-                const userEmail = sessionStorage.getItem('email'); // Retrieve the email from session storage
-
-                const response = await fetch(`/fetch-expenses/fetchdata?email=${encodeURIComponent(userEmail)}`);
+                const response = await fetch(`/fetch-expenses/fetchdata`);
                 if (response.ok) {
                     const expenses = await response.json();
-                    console.log(expenses);
-
                     const tbody = document.getElementById('expense-tbody');
-                    tbody.innerHTML = ''; // Clear existing rows
+                    tbody.innerHTML = ''; 
 
                     expenses.forEach(expense => {
                         const row = document.createElement('tr');
@@ -100,7 +91,7 @@
                     alert('Error fetching expenses');
                 }
             } catch (error) {
-                console.error('Error fetching expenses:', error); // Add this to handle any errors
+                console.error('Error fetching expenses:', error);
             }
         }
     </script>

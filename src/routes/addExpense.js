@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); // Import User model here
+const User = require("../models/User");
 const getExpenseModel = require("../models/expense");
 
 router.get('/',(req,res)=>{
@@ -9,9 +9,8 @@ router.get('/',(req,res)=>{
 });
 
 router.post('/', async (req, res) => {
-  const { email, amount, date, purpose, modeOfPayment } = req.body;
-
-  // Validate input data
+  const { amount, date, purpose, modeOfPayment } = req.body;
+  const email=req.session.user.email;
   if (!email || !amount || !date || !purpose || !modeOfPayment) {
     return res.status(400).json({ error: 'Missing required fields' });
   }

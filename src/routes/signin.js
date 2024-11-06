@@ -38,6 +38,15 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.redirect('/');
+    });
+  });
+
 
 
 module.exports = router;

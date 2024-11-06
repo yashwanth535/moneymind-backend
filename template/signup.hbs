@@ -30,13 +30,18 @@
         Show
     </button>
 </div>
-
+ 
  <div id="loading" class="loading" style="display: none;">
         <img src="images/loading.gif" alt="Loading..." width="20px" >
  </div>
+
+    <div id="errorMessages" style="color: rgb(238, 9, 9); display: block;"></div>
     <p id="wait" style="display:none;">Just a moment, your OTP is on the way! (5 seconds)</p>
+
+
     <input class="sub" type="submit" value="generate OTP">
-    <p id="message"></p>
+
+    
     <p style="display: inline;">Already have an account?</p>
     <a href="/signin">Signin</a>
   </form>
@@ -58,6 +63,10 @@
   {{>footer}}
 
   <script>
+    const errorMessages = document.getElementById("errorMessages");
+    
+
+
 
 function togglePassword() {
     const passwordInput = document.getElementById("password");
@@ -76,7 +85,7 @@ document.getElementById('signupForm').addEventListener('submit', userExists);
 async function userExists(event){
     event.preventDefault(); 
     const email = document.getElementById('email').value;
-    const messageDiv = document.getElementById('message');
+    errorMessages.innerHTML = "";
     const response = await fetch('/signup/userExists', {
             method: 'POST',
             headers: {
@@ -87,22 +96,54 @@ async function userExists(event){
      const data = await response.json();
 
      if (response.status === 400) {
-            messageDiv.textContent = data.message;
+            const message = document.createElement("p");
+            message.textContent = data.message;
+            errorMessages.appendChild(message);
       } 
       else if (response.status === 200) {
-          generateOTP();
+          checkPassword();
       }
+}
+
+
+function checkPassword() {
+    errorMessages.innerHTML = "";
+    const password = document.getElementById("password").value;
+    const message = document.createElement("p");
+    message.textContent = 'Password must contain:';
+    errorMessages.appendChild(message);
+   
+    const criteria = [
+    { regex: /.{8,}/, message: "> At least 8 characters." },
+    { regex: /[A-Z]/, message: "> At least one uppercase letter." },
+    { regex: /[!@#$%^&*()_\-+=~`[\]{}|:;"'<>,.?/]/, message: "> At least one special character." },
+    { regex: /^\S+$/, message: "> No spaces allowed." }
+    ];
+
+    let isValid = true;
+
+    // Check each criterion
+    criteria.forEach(criterion => {
+        if (!criterion.regex.test(password)) {
+            const message = document.createElement("p");
+            message.textContent = criterion.message;
+            errorMessages.appendChild(message);
+            isValid = false;
+        }
+    });
+    if(isValid){
+      errorMessages.innerHTML="";
+        generateOTP();
+    }
 }
  
 async function generateOTP() {
          
           console.log("generate otp function");
           document.getElementById('loading').style.display='block';
-
+          errorMessages.innerHTML = "";
           const email = document.getElementById('email').value;
-          const messageDiv = document.getElementById('message');
-            document.getElementById('wait').style.display = 'block';
-            messageDiv.style.display = 'none';
+          document.getElementById('wait').style.display = 'block';
 
             const response = await fetch('/signup/generateOTP', {
               method: 'POST',
@@ -115,7 +156,12 @@ async function generateOTP() {
             const data = await response.json();
 
             if (response.status === 400) {
-              messageDiv.textContent = data.message;
+              const message = document.createElement("p");
+              message.textContent = data.message;
+              errorMessages.appendChild(message);
+              document.getElementById('wait').style.display = 'none';
+              document.getElementById('loading').style.display='none';
+
             } else if (response.status === 200) {
               const otpForm = document.getElementById('otpForm');
               const signupForm = document.getElementById('signupForm');
@@ -167,7 +213,8 @@ async function signUpUser(){
             document.getElementById('otpmessage').textContent  = 'An error occurred. Please try again.';
           }
 }
-     
+
+
 
 </script>
 </body>

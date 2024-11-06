@@ -5,7 +5,6 @@ const signupRoutes = require("./src/routes/signup");
 const addExpenseRoutes = require("./src/routes/addExpense")
 const fetchExpenseRoutes = require("./src/routes/fetchExpense")
 const homeRoutes =require("./src/routes/home")
-const logoutRoutes=require("./src/routes/logout");
 const landingRoutes=require("./src/routes/landing");
 const getExpenseModel = require("./src/models/expense");
 
@@ -18,7 +17,7 @@ app.use("/signup",signupRoutes);
 app.use("/home",isAuthenticated,homeRoutes);
 app.use("/add-expense",isAuthenticated,addExpenseRoutes);
 app.use("/fetch-expenses",isAuthenticated,fetchExpenseRoutes);
-app.use("/logout",logoutRoutes)
+
 
 app.get('/dashboard', async (req, res) => {
   const email = req.query.email;
