@@ -13,42 +13,26 @@
         homeLink="/home" 
     }}
 
-    <!-- Profile button container -->
-    <div id="profileButtonContainer">
-        <div id="profile">
-            <p class="profile-info">My GPTs</p>
-            <p class="profile-info">Customize ChatGPT</p>
-            <p class="profile-info">Settings</p>
-            <p class="profile-info">Upgrade Plan</p>
-            <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
-        </div>
-    </div>
 
-    <!-- Dashboard section -->
+    <div id="home-div">
     <div id="dashBoard">
         <h2>Dashboard Overview</h2>
         <p id="totalExpenses">Total Expenses: 0/-</p>
         <h3>Expense Trend Chart</h3>
         <canvas id="expenseChart" width="400" height="200"></canvas> 
     </div>
+    </div>
 
     <script>
-        // Function to toggle profile dropdown display
-        function showProfile() {
-            const profileDiv = document.getElementById('profile');
-            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
-        }
         async function retrieveDashBoard() {
-            const email = sessionStorage.getItem('email');
-
             try {
-                const response = await fetch(`/dashboard?email=${encodeURIComponent(email)}`);
+                const response = await fetch(`/dashboard`);
                 
                 if (response.ok) {
                     const data = await response.json();
                     
                     // Update the total expenses
-                    document.getElementById('totalExpenses').innerHTML = `Total Expenses: $${data.total}`;
+                    document.getElementById('totalExpenses').innerHTML = `Total Expenses: ₹${data.total}/-`;
                     
                     // Render the expense trend chart
                     renderExpenseChart(data.expenseTrend);

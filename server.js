@@ -20,7 +20,8 @@ app.use("/fetch-expenses",isAuthenticated,fetchExpenseRoutes);
 
 
 app.get('/dashboard', async (req, res) => {
-  const email = req.query.email;
+  const email = req.session.user.email;
+  console.log(email);
   const Expense = getExpenseModel(email);
 
   try {

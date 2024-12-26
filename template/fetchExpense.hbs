@@ -8,7 +8,7 @@
        table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 150px 0;
         }
         table, th, td {
             border: 1px solid #ddd;
@@ -24,23 +24,11 @@
             background-color: #f9f9f9;
         }
     </style>
-    <link rel="stylesheet" href="home.css">
 </head>
 <body>
    {{> homeHeader
         homeLink="/home" 
     }}
-
-    <div id="profileButtonContainer">
-        <div id="profile">
-            <p class="profile-info">My GPTs</p>
-            <p class="profile-info">Customize ChatGPT</p>
-            <p class="profile-info">Settings</p>
-            <p class="profile-info">Upgrade Plan</p>
-            <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
-        </div>
-    </div>
-
    <div id="expense-list" style="display: block; width: 60%; margin: 0 auto;">
     <table style="width: 100%;">
             <thead>
@@ -61,12 +49,6 @@
     
 
     <script>
-           function showProfile() {
-            const profileDiv = document.getElementById('profile');
-            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
-        }
-      
- 
    window.onload = async function() {
  
     
