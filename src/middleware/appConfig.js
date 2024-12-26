@@ -31,8 +31,8 @@ const configureApp = () => {
     }
   }));
   
-  const viewsPath = path.join(__dirname, '../../template');
-  const partialsPath = path.join(__dirname, "../../template/partials");
+  const viewsPath = path.join(__dirname, '../../public/views');
+  const partialsPath = path.join(__dirname, "../../public/views");
 
   app.set("view engine", "hbs");
   app.set("views", viewsPath);

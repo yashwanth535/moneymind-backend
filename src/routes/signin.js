@@ -21,7 +21,6 @@ router.post('/', async (req, res) => {
         if (user) {
            
             const isMatch = await comparePassword(password, user.pass);
-
             if (isMatch) {
                 req.session.user = { email: user.email };
                 console.log('Created the session user ' + JSON.stringify(req.session.user));
