@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body onload="retrieveDashBoard()">
+     
+    {{> homeHeader
+        homeLink="/home" 
+    }}
+
+
+    <div id="home-div">
+    <div id="dashBoard">
+        <h2>Dashboard Overview</h2>
+        <p id="totalExpenses">Total Expenses: 0/-</p>
+        <h3>Expense Trend Chart</h3>
+        <canvas id="expenseChart" width="400" height="200"></canvas> 
+    </div>
+    </div>
+
+    <script>
+        async function retrieveDashBoard() {
+            try {
+                const response = await fetch(`home/dashboard`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update the total expenses
+                    document.getElementById('totalExpenses').innerHTML = `Total Expenses: ₹${data.total}/-`;
+                    
+                    // Render the expense trend chart
+                    renderExpenseChart(data.expenseTrend);
+                } else {
+                    alert('Error fetching dashboard data');
+                }
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        }
+
+        function renderExpenseChart(expenseTrend) {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            
+            // Prepare data for the chart
+            const labels = expenseTrend.map(item => item._id); // Assuming expenseTrend has date strings in _id
+            const amounts = expenseTrend.map(item => item.total); // Assuming total is stored in total
+
+            // Create the chart
+            new Chart(ctx, {
+                type: 'line', // Change to 'bar', 'pie', etc. as needed
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses Over Time',
+                        data: amounts,
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+    
+    </script>
+</body>
+</html>

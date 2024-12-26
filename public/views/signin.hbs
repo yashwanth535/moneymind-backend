@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Money Mind</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/signin.css">
+</head>
+<body id="home" class="roboto-regular">
+
+    {{> landingHeader
+        homeLink="/" 
+        
+    }}
+
+    <div class="container">
+        
+        <form id="signinform">
+            <h2>Sign in</h2>
+            <p>stay updated on your expenses</p>
+            <input placeholder="Email" name="email" type="text" id="email" required>
+            <br>
+            <div style="position: relative; display: inline-block;">
+                <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+                <button type="button" onclick="togglePassword()" id="toggleButton">Show</button>
+            </div>
+            <input class="sub" type="submit" value="Signin">
+            <p id="message"></p>
+            <p style="display: inline;">don't have an account?</p>
+            <a href="/signup">signup</a>
+        </form>
+    </div>
+
+
+    
+    {{> features}}
+    {{> footer}}
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleButton = event.target; // The clicked button
+    
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.textContent = "Hide";
+    } else {
+        passwordInput.type = "password";
+        toggleButton.textContent = "Show";
+    }
+}
+document.getElementById('signinform').addEventListener('submit', signinUser);
+async function signinUser(event) {
+            event.preventDefault(); 
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password }) 
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/home'; 
+                } else {
+                    document.getElementById('message').innerHTML=data.message;
+                }
+            } catch (error) {
+                console.error('Error during signin:', error);
+            }
+        }
+
+        
+</script>
+</body>
+</html>

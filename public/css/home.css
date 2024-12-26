@@ -1,0 +1,13 @@
+
+#dashBoard {
+  max-width: 400px; /* Limit the width of the dashboard */
+  margin: 20px auto; /* Center the dashboard horizontally */
+  padding: 20px; /* Add padding inside the dashboard */
+  background-color: #fff; /* White background for contrast */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+#home-div{
+  margin-top: 100px;
+}

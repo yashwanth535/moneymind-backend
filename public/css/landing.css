@@ -1,0 +1,50 @@
+
+
+
+
+.hero-section {
+ 
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+  color:black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero-section h2 {
+  font-size: 3em;
+  /* color: #ffcb05; */
+  color:black;
+}
+.hero-section p {
+  color:black;
+  font-size: 1.5em;
+  margin: 20px 0;
+}
+.cta-btn {
+  background-color: #1b41e9;
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 30px;
+}
+.cta-btn:hover {
+  background-color: #4863de;
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+  
+.hero-section h2 {
+  font-size: 35px;
+}
+
+}

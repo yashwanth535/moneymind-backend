@@ -1,0 +1,127 @@
+<style>
+  html, body {
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+margin: 0;
+padding: 0;
+}
+
+header {
+height: 90px; 
+background-color: rgb(255, 255, 255);
+position: fixed;
+display:flex;
+width: 100%;
+box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+top:0px;
+}
+.logobar{
+  flex: 1;
+}
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.navbar ul {
+  display: flex;
+  list-style: none;
+}
+.navbar ul li a{
+  font-size: 20px;
+  margin-right: 20px; /* Space between each item */
+  text-decoration: none;
+  color: black;
+}
+.navbar ul li a:hover {
+  text-decoration: underline;
+}
+#profileButton:hover #menu-img {
+  content: url('images/menu.jpg'); /* New image on hover */
+}
+
+#profile {
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  width: 150px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+  .profile-info {
+  cursor: pointer;
+  font-size: 16px;
+}
+.profile-info:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+  img{
+    width:200px;
+  }
+
+  header {
+    flex-direction: column;
+    height: 120px;
+    }
+    .logobar{
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+     .navbar {
+        height:30px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    } 
+    .navbar ul li a{
+      font-size: 15px;
+    
+    }
+}
+
+</style>
+<header>
+    <div class="logobar">
+      <a href="{{homeLink}}">
+      <img src="images/moneymind2.png" alt="Money Mind Logo" width="200px;">
+      </a>
+    </div>
+    <div class="navbar">
+      <ul>
+        <li><a href="{{homeLink}}">Home</a></li>
+        <li><a href='/add-expense'>Add Expense</a></li>
+        <li><a href='/fetch-expenses'>Manage Expense</a></li>
+        <li>
+          <a href="javascript:void(0)" id="profileButton" onclick="showProfile()">
+            <img id="menu-img" src="images/menu.png" width="26px">
+          </a></li>
+      </ul>
+    </div>
+  
+  <hr>
+</header>
+
+
+        <div id="profile" style="display: none;">
+            {{!-- <p class="profile-info">My GPTs</p>
+            <p class="profile-info">Customize ChatGPT</p>
+            <p class="profile-info">Settings</p>
+            <p class="profile-info">Upgrade Plan</p> --}}
+            <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
+        </div>
+
+
+<script>
+    function showProfile() {
+            const profileDiv = document.getElementById('profile');
+            console.log(profileDiv.style.display);
+            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
+    }
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Expense</title>   
+    <style>
+       table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 150px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+   {{> homeHeader
+        homeLink="/home" 
+    }}
+   <div id="expense-list" style="display: block; width: 60%; margin: 0 auto;">
+    <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Mode of Payment</th>
+                </tr>
+            </thead>
+            <tbody id="expense-tbody">
+                <!-- Table rows will be inserted here -->
+            </tbody>
+        </table>
+        
+    </div>
+
+    
+
+    <script>
+   window.onload = async function() {
+ 
+    
+    try {
+                const response = await fetch(`/fetch-expenses/fetchdata`);
+                if (response.ok) {
+                    const expenses = await response.json();
+                    const tbody = document.getElementById('expense-tbody');
+                    tbody.innerHTML = ''; 
+
+                    expenses.forEach(expense => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${expense.amount}</td>
+                            <td>${expense.date}</td>
+                            <td>${expense.purpose}</td>
+                            <td>${expense.modeOfPayment}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    alert('Error fetching expenses');
+                }
+            } catch (error) {
+                console.error('Error fetching expenses:', error);
+            }
+        }
+    </script>
+</body>
+</html>
