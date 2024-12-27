@@ -3,6 +3,7 @@
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 margin: 0;
 padding: 0;
+height:100%;
 }
 
 header {
@@ -117,11 +118,36 @@ top:0px;
             <p class="profile-info" onclick="window.location.href='/signin/logout' ">Log out</p>
         </div>
 
-
 <script>
     function showProfile() {
-            const profileDiv = document.getElementById('profile');
-            console.log(profileDiv.style.display);
-            profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
+        const profileDiv = document.getElementById('profile');
+        console.log(profileDiv.style.display);
+        profileDiv.style.display = profileDiv.style.display === 'none' ? 'block' : 'none';
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Prevent body click from hiding profile when clicking inside the profile menu
+        const profileDiv = document.getElementById('profile');
+        if (profileDiv) {
+            profileDiv.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+        }
+
+        // Prevent body click from hiding profile when clicking the profile button
+        const profileButton = document.getElementById("profileButton");
+        if (profileButton) {
+            profileButton.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+        }
+
+        // Add a body click listener to hide the profile menu
+        document.body.addEventListener("click", () => {
+            console.log("body clicked");
+            if (profileDiv && profileDiv.style.display === 'block') {
+                profileDiv.style.display = 'none';
+            }
+        });
+    });
 </script>
