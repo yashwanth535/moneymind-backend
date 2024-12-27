@@ -13,3 +13,19 @@
 #home-div{
   margin-top: 100px;
 }
+
+@media (max-width: 768px) {
+  #home-div{
+    margin-top: 150px;
+  }
+  #dashBoard {
+    position: fixed;
+    left: 50%; /* Start the dashboard from the center */
+    transform: translateX(-50%); /* Shift it back by half its width for centering */
+    width: 75%;
+    padding: 0px; /* Padding inside the dashboard */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+  
+}

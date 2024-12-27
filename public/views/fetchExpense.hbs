@@ -6,9 +6,9 @@
     <title>Fetch Expense</title>   
     <style>
        table {
-            width: 100%;
+            width:75%;
             border-collapse: collapse;
-            margin: 150px 0;
+            margin: 150px auto;
         }
         table, th, td {
             border: 1px solid #ddd;
@@ -29,8 +29,7 @@
    {{> homeHeader
         homeLink="/home" 
     }}
-   <div id="expense-list" style="display: block; width: 60%; margin: 0 auto;">
-       <table style="width: 100%;">
+       <table>
            <thead>
                <tr>
                    <th>Amount</th>
@@ -44,7 +43,7 @@
                <!-- Table rows will be inserted here -->
            </tbody>
        </table>
-   </div>
+
 
    <script>
        window.onload = async function() {
