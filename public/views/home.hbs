@@ -16,11 +16,9 @@
 
     <div id="home-div">
     <div id="dashBoard">
-        <h2>Dashboard Overview</h2>
+        <h2>Expense Overview</h2>
         <p id="totalExpenses">Total Expenses: 0/-</p>
-        <h3>Expense Trend Chart</h3>
-        <canvas id="expenseChart" width="400" height="200"></canvas> 
-        <canvas id="pieChart" width="400" height="200"></canvas> 
+        <canvas id="pieChart" width="200" height="200"></canvas> 
     </div>
     </div>
 
@@ -35,10 +33,6 @@
                 // Update the total expenses
                 document.getElementById('totalExpenses').innerHTML = `Total Expenses: ₹${data.total}/-`;
                 
-                // Render the expense trend chart (line chart)
-              //  renderExpenseChart(data.expenseTrend);
-
-                // Render the expense distribution chart (pie chart)
                 renderPieChart(data.expenseByPurpose);
             } else {
                 alert('Error fetching dashboard data');
@@ -48,74 +42,51 @@
         }
     }
 
-    function renderExpenseChart(expenseTrend) {
-        const ctx = document.getElementById('expenseChart').getContext('2d');
-        
-        // Prepare data for the line chart
-        const labels = expenseTrend.map(item => item._id); // Assuming expenseTrend has date strings in _id
-        const amounts = expenseTrend.map(item => item.total); // Assuming total is stored in total
-
-        // Create the line chart
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Expenses Over Time',
-                    data: amounts,
-                    fill: false,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Amount'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     function renderPieChart(expenseByPurpose) {
-        const ctx = document.getElementById('pieChart').getContext('2d');
-        
-        // Prepare data for the pie chart
-        const labels = expenseByPurpose.map(item => item._id); // Purpose names
-        const values = expenseByPurpose.map(item => item.total); // Total amounts per purpose
+    const ctx = document.getElementById('pieChart').getContext('2d');
 
-        // Create the pie chart
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: [
-                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-                    ] // Customize colors for each segment
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    }
+    // Sort the data in descending order of total amounts
+    const sortedData = expenseByPurpose.sort((a, b) => b.total - a.total);
+
+    // Separate the top 6 purposes and group the rest as "Others"
+    const top6 = sortedData.slice(0, 6);
+    const others = sortedData.slice(6);
+
+    // Calculate the total for "Others"
+    const othersTotal = others.reduce((sum, item) => sum + item.total, 0);
+
+    // Prepare labels and values for the chart
+    const labels = top6.map(item => item._id); // Top 6 purpose names
+    const values = top6.map(item => item.total); // Top 6 totals
+
+    if (othersTotal > 0) {
+        labels.push('Others'); // Add "Others" label
+        values.push(othersTotal); // Add "Others" total
+    }
+
+    // Create the pie chart
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+                    '#C0C0C0' // Color for "Others"
+                ].slice(0, labels.length) // Ensure colors match the number of labels
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
                 }
             }
-        });
-    }
+        }
+    });
+}
+
 </script>
