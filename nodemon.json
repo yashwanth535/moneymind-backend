@@ -1,5 +1,5 @@
 {
-  "watch": ["src/**/*.js", "template/**/*.hbs"],
-  "ext": "js,hbs,json",
+  "watch": ["src/**/*.js", "public/**/*.hbs", "public/**/*.css","*.js","*.json"],
+  "ext": "js,hbs,json,css",
   "ignore": ["node_modules"]
 }

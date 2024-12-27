@@ -20,6 +20,12 @@
             <p id="totalExpenses">Total Expenses: 0/-</p>
             <canvas id="pieChart" width="200" height="200"></canvas> 
         </div>
+       <div id="debitSection" style="margin: 20px 0; text-align: center;">
+            <h3>Total Debit This Month: ₹<span id="totalDebit">0</span></h3>
+            <ul id="lastDebitsList" style="list-style: none; padding: 0;">
+                <!-- Last 5 debits will be populated dynamically -->
+            </ul>
+        </div>
     </div>
 
     <script>
@@ -88,5 +94,33 @@
         }
     });
 }
+
+async function fetchDebits() {
+    try {
+        const response = await fetch('/home/debits');
+        if (response.ok) {
+            const data = await response.json();
+
+            // Update total debit
+            document.getElementById('totalDebit').textContent = data.totalDebit;
+
+            // Populate last 5 debits
+            const lastDebitsList = document.getElementById('lastDebitsList');
+            lastDebitsList.innerHTML = ''; // Clear any existing entries
+
+            data.lastDebits.forEach(debit => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${new Date(debit.date).toLocaleDateString()}: ₹${debit.amount}`;
+                lastDebitsList.appendChild(listItem);
+            });
+        } else {
+            alert('Error fetching debit data');
+        }
+    } catch (error) {
+        console.error('Error fetching debits:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchDebits);
 
 </script>
