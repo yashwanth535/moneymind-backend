@@ -30,4 +30,52 @@ router.get('/fetchdata', async (req, res) => {
   }
 });
 
+router.delete('/delete/:id', async (req, res) => {
+  try {
+      const email = req.session.user.email;
+      const Expense = getExpenseModel(email);
+
+      const result = await Expense.findByIdAndDelete(req.params.id);
+
+      if (!result) {
+          return res.status(404).json({ message: 'Expense not found' });
+      }
+
+      res.status(200).json({ message: 'Expense deleted successfully' });
+  } catch (err) {
+      console.error('Error deleting expense:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.put('/edit/:id', async (req, res) => {
+  try {
+      const email = req.session.user.email;
+      const Expense = getExpenseModel(email);
+
+      const updatedExpense = await Expense.findByIdAndUpdate(
+          req.params.id,
+          {
+              $set: {
+                  amount: req.body.amount,
+                  purpose: req.body.purpose,
+                  date: req.body.date,
+                  modeOfPayment: req.body.modeOfPayment,
+              },
+          },
+          { new: true }
+      );
+
+      if (!updatedExpense) {
+          return res.status(404).json({ message: 'Expense not found' });
+      }
+
+      res.status(200).json({ message: 'Expense updated successfully', updatedExpense });
+  } catch (err) {
+      console.error('Error updating expense:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 module.exports=router;

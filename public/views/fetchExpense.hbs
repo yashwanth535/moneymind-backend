@@ -30,52 +30,141 @@
         homeLink="/home" 
     }}
    <div id="expense-list" style="display: block; width: 60%; margin: 0 auto;">
-    <table style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Purpose</th>
-                    <th>Mode of Payment</th>
-                </tr>
-            </thead>
-            <tbody id="expense-tbody">
-                <!-- Table rows will be inserted here -->
-            </tbody>
-        </table>
-        
-    </div>
+       <table style="width: 100%;">
+           <thead>
+               <tr>
+                   <th>Amount</th>
+                   <th>Date</th>
+                   <th>Purpose</th>
+                   <th>Mode of Payment</th>
+                   <th>Actions</th>
+               </tr>
+           </thead>
+           <tbody id="expense-tbody">
+               <!-- Table rows will be inserted here -->
+           </tbody>
+       </table>
+   </div>
 
-    
+   <script>
+       window.onload = async function() {
+           try {
+               const response = await fetch(`/fetch-expenses/fetchdata`);
+               if (response.ok) {
+                   const expenses = await response.json();
+                   const tbody = document.getElementById('expense-tbody');
+                   tbody.innerHTML = '';
 
-    <script>
-   window.onload = async function() {
- 
-    
+                   expenses.forEach(expense => {
+                       const row = document.createElement('tr');
+                       row.id = `row-${expense._id}`; // Add unique ID to each row
+                       row.innerHTML = `
+                           <td><span class="static">${expense.amount}</span><input class="edit hidden" type="number" value="${expense.amount}" /></td>
+                           <td><span class="static">${new Date(expense.date).toLocaleDateString()}</span><input class="edit hidden" type="date" value="${expense.date.split('T')[0]}" /></td>
+                           <td><span class="static">${expense.purpose}</span><input class="edit hidden" type="text" value="${expense.purpose}" /></td>
+                           <td><span class="static">${expense.modeOfPayment}</span><input class="edit hidden" type="text" value="${expense.modeOfPayment}" /></td>
+                           <td>
+                               <button class="edit-btn" onclick="editExpense('${expense._id}')">Edit</button>
+                               <button class="save-btn hidden" onclick="saveExpense('${expense._id}')">Save</button>
+                               <button onclick="deleteExpense('${expense._id}')">Delete</button>
+                           </td>
+                       `;
+                       tbody.appendChild(row);
+                   });
+               } else {
+                   alert('Error fetching expenses');
+               }
+           } catch (error) {
+               console.error('Error fetching expenses:', error);
+           }
+       };
+
+       function editExpense(expenseId) {
+           const row = document.getElementById(`row-${expenseId}`);
+           const staticFields = row.querySelectorAll('.static');
+           const editFields = row.querySelectorAll('.edit');
+           const editBtn = row.querySelector('.edit-btn');
+           const saveBtn = row.querySelector('.save-btn');
+
+           // Hide static fields and "Edit" button, show edit fields and "Save" button
+           staticFields.forEach(el => el.classList.add('hidden'));
+           editFields.forEach(el => el.classList.remove('hidden'));
+           editBtn.classList.add('hidden');
+           saveBtn.classList.remove('hidden');
+       }
+
+async function saveExpense(expenseId) {
+    const row = document.getElementById(`row-${expenseId}`);
+    if (!row) {
+        console.error(`Row with ID row-${expenseId} not found`);
+        return;
+    }
+
+    // Get values from input fields inside the row
+    const inputs = row.getElementsByTagName('input');
+    if (inputs.length < 4) {
+        console.error("One or more input fields could not be found");
+        return;
+    }
+
+    const amount = inputs[0].value; // Assuming first input is amount
+    const date = inputs[1].value; // Assuming second input is date
+    const purpose = inputs[2].value; // Assuming third input is purpose
+    const modeOfPayment = inputs[3].value; // Assuming fourth input is mode of payment
+
+    // Validation: Check if any field is empty
+    if (!amount || !date || !purpose || !modeOfPayment) {
+        alert("All fields are required!");
+        return;
+    }
+
     try {
-                const response = await fetch(`/fetch-expenses/fetchdata`);
-                if (response.ok) {
-                    const expenses = await response.json();
-                    const tbody = document.getElementById('expense-tbody');
-                    tbody.innerHTML = ''; 
+        const response = await fetch(`/fetch-expenses/edit/${expenseId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount,
+                date,
+                purpose,
+                modeOfPayment,
+            }),
+        });
 
-                    expenses.forEach(expense => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${expense.amount}</td>
-                            <td>${expense.date}</td>
-                            <td>${expense.purpose}</td>
-                            <td>${expense.modeOfPayment}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                } else {
-                    alert('Error fetching expenses');
-                }
-            } catch (error) {
-                console.error('Error fetching expenses:', error);
-            }
+        if (response.ok) {
+            alert('Expense updated successfully');
+            window.location.reload();
+        } else {
+            alert('Error updating expense');
         }
-    </script>
+    } catch (error) {
+        console.error('Error updating expense:', error);
+    }
+}
+
+
+
+       async function deleteExpense(expenseId) {
+           if (!confirm("Are you sure you want to delete this expense?")) return;
+
+           try {
+               const response = await fetch(`/fetch-expenses/delete/${expenseId}`, { method: 'DELETE' });
+               if (response.ok) {
+                   alert('Expense deleted successfully');
+                   window.location.reload();
+               } else {
+                   alert('Error deleting expense');
+               }
+           } catch (error) {
+               console.error('Error deleting expense:', error);
+           }
+       }
+   </script>
+
+   <style>
+       .hidden {
+           display: none;
+       }
+   </style>
 </body>
-</html>

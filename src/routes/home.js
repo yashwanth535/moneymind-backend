@@ -13,23 +13,33 @@ router.get('/dashboard', async (req, res) => {
     const Expense = getExpenseModel(email);
   
     try {
-        const total = await Expense.aggregate([{ $group: { _id: null, total: { $sum: '$amount' } } }]);
-        
-        // Fetch expense trend data
+        // Fetch total expenses
+        const total = await Expense.aggregate([
+            { $group: { _id: null, total: { $sum: '$amount' } } }
+        ]);
+
+        // Fetch expense trend data for line chart
         const expenseTrend = await Expense.aggregate([
             { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, total: { $sum: "$amount" } } },
             { $sort: { _id: 1 } } // Sort by date
-        ]).exec();
-        
+        ]);
+
+        // Fetch data for pie chart grouped by purpose
+        const expenseByPurpose = await Expense.aggregate([
+            { $group: { _id: "$purpose", total: { $sum: "$amount" } } }
+        ]);
+
         res.status(200).json({
             total: total[0]?.total || 0, // Total expenses
-            expenseTrend // Send expense trend data
+            expenseTrend, // Expense trend data for line chart
+            expenseByPurpose // Expense data for pie chart
         });
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         res.status(500).send('Internal Server Error');
     }
-  });
+});
+
 
 module.exports = router;
 
