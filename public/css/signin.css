@@ -37,7 +37,7 @@ form {
   box-shadow: 1px 1px 8px rgb(205, 201, 201);
 }
 
-#toggleButton{
+.toggle{
   position: absolute;
   right: 10px;
   top: 50%;

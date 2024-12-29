@@ -21,7 +21,6 @@ const signIn = async (req, res) => {
 
   try {
     const user = await User_Collection.findOne({ email: email });
-
     if (user) {
       const isMatch = await comparePassword(password, user.pass);
       if (isMatch) {
@@ -57,9 +56,8 @@ const user_exists=async (req, res) => {
   const { email} = req.body;
 
   try {
-    // Check if the user already exists
-    const user = await User_Collection.findOne({ email: email });
 
+    const user = await User_Collection.findOne({ email: email });
     if (user) {
       console.log("user exists");
       return res.status(400).json({ message: 'Email is already registered.' });
@@ -78,7 +76,9 @@ const user_exists=async (req, res) => {
 const generate_otp=async (req, res) => {
             
   console.log("inside generateotp route");
-  const { email} = req.body;
+  const { email,text} = req.body;
+  console.log("email is "+email);
+  console.log("text is "+text);
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -89,7 +89,6 @@ const generate_otp=async (req, res) => {
   });
 
   function generateOTP() {
-    // Generate a random 6-digit number
     const otp = Math.floor(100000 + Math.random() * 900000);
     return otp.toString(); // Convert to string if needed
   }
@@ -103,7 +102,7 @@ const generate_otp=async (req, res) => {
     from: '"moneymind" <verify.moneymind@gmail.com>', // Corrected email format
     to: email, // Recipient's email address
     subject: 'OTP verification!', // Subject of the email
-    text: otp + ' this is your one-time password to register into MoneyMind', // Plain text body
+    text: otp +"  "+text+"\n Do not share with any body", // Plain text body
   };
 
   // Send the email
@@ -138,24 +137,33 @@ const signUp=async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Hash the password before saving it
     const hashedPassword = await hashPassword(password);
-
-    // Create a new user with the hashed password
     const newUser = new User_Collection({ email: email, pass: hashedPassword });
     await newUser.save();
     req.session.user = { email: newUser.email };
-
-  console.log('Created the session user ' + JSON.stringify(req.session.user));
-
-    // Send a success message
+    console.log('Created the session user ' + JSON.stringify(req.session.user));
     res.json({ email: newUser.email,message: 'Registration successful, please login' });
-
   } catch (err) {
     console.error('Error during registration:', err);
     res.status(500).send('Internal Server Error');
   }
 };
+
+// ---------------------------------------------------------------------------------------------------------------------------------------
+
+const reset_password=async (req,res)=>{
+  const { email, password } = req.body;
+  try {
+    const user=await User_Collection.findOne({email});
+    const hashedPassword = await hashPassword(password);
+    user.pass = hashedPassword;
+    await user.save();
+    res.status(200).json({ message: 'Password reset successful' });
+} catch (err) {
+  console.error(err);
+  res.status(500).json({ message: 'Server error' });
+}
+}
 // ---------------------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   renderSignIn,
@@ -165,5 +173,6 @@ module.exports = {
   logout,
   user_exists,
   generate_otp,
-  verify_otp
+  verify_otp,
+  reset_password
 };

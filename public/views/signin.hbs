@@ -17,19 +17,59 @@
 
     <div class="container">
         
-        <form id="signinform">
+        <form id="signinform" style="display: block;">
             <h2>Sign in</h2>
             <p>stay updated on your expenses</p>
             <input placeholder="Email" name="email" type="text" id="email" required>
             <br>
             <div style="position: relative; display: inline-block;">
                 <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
-                <button type="button" onclick="togglePassword()" id="toggleButton">Show</button>
+                <button class="toggle" type="button" onclick="togglePassword('password','toggleButton')" id="toggleButton">Show</button>
             </div>
             <input class="sub" type="submit" value="Signin">
             <p id="message"></p>
+            <a href="#" onclick="show_reset_form()">forgot password?</a><br>
+            </br>
             <p style="display: inline;">don't have an account?</p>
             <a href="/auth/signup">signup</a>
+        </form>
+
+
+
+        <form id="reset-otp-generate-form" style="display: none;">
+            <h2>Enter your registered email address</h2>
+            <input placeholder="Email" name="email" type="text" id="email-reset" required>
+            <br>
+            <div id="loading" class="loading" style="display: none;">
+                <img src="/images/loading.gif" alt="Loading..." width="20px" >
+            </div>
+            <div id="errorMessages" style="color: rgb(238, 9, 9); display: block;"></div>
+            <p id="wait" style="display:none;">Just a moment, your OTP is on the way! (5 seconds)</p>
+            <input class="sub" type="submit" value="send otp">
+        </form>
+
+        <form id="otpForm" style="display:none;">
+            <h2>Enter your otp</h2>
+            <p>We’ve sent an OTP to your email address</p>
+            <input placeholder="Enter otp" name="otp" type="text" id="otp" required>
+            <br>
+            <input class="sub" type="submit" value="verify otp">
+            <p id="otpmessage"></p>
+        </form>
+
+
+        <form id="reset-password-form" style="display: none;">
+            <div style="position: relative; display: inline-block;">
+                <input placeholder="Password" name="password" type="password" id="password_reset" required style="padding-right: 4px;">
+                <button class="toggle" type="button" onclick="togglePassword('password_reset','toggleButton_reset')" id="toggleButton_reset">Show</button>
+            </div>
+            <div id="errorMessages-2" style="color: rgb(238, 9, 9); display: block;"></div>
+            <input class="sub" type="submit" value="change_password">
+        </form>
+
+        <form id="success" style="display: none;">
+            <h2>our password has been successfully reset. Please log in using your new credentials.</h2>
+            <a href="/auth/signin">signin</a>
         </form>
     </div>
     {{> features}}

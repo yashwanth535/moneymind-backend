@@ -76,13 +76,17 @@ async function generateOTP() {
           errorMessages.innerHTML = "";
           const email = document.getElementById('email').value;
           document.getElementById('wait').style.display = 'block';
-
+          
+          const json_data={
+            email:email,
+            text:'this is your one-time password to register into MoneyMind'
+          }
             const response = await fetch('/auth/generateOTP', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ email})
+              body: JSON.stringify(json_data)
             });
 
             const data = await response.json();
