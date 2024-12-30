@@ -2,48 +2,52 @@
     .features {
   padding: 50px 0;
   text-align: center;
+  margin-top:50px;
+  margin-bottom: 110px;
 }
 
 .feature-cards {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 .feature-card {
-  background-color: #ebe4e4;
+  background-color: rgba(255, 255, 255);
   text-align: center;
-  color:black;
-  width: 30%;
+  color:rgb(0, 0, 0);
+  width: 16%;
+  height: 295px;
   padding: 20px;
   margin: 10px;
   border-radius: 8px;
-  border:solid;
-  border-width:1px;
-  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth pop-up effect */
 }
-.feature-card h4 {
-  font-size: 1.5em;
-  margin-bottom: 15px;
-  color: black;
+.feature-card:hover {
+    transform: scale(1.02); /* Pop-up effect */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+p{
+  color:black;
 }
 
 </style>
 
-    <section class="features"></section>
-        <h1 style="text-align: center;">Why Use Money Mind?</h1>
+    <section class="features">
+        <h1 style="text-align: center;color:white;font-size:30px;">Our Services</h1></br></br>
         <div class="feature-cards">
             <div class="feature-card">
-                <h4>Real-time Monitoring</h4>
+                <h3>Real-time Monitoring</h3>
                 <p>Track your daily, weekly, and monthly expenses with live updates.</p>
+                <img src="/images/real-time.svg" width="180px">
             </div>
             <div class="feature-card">
-                <h4>Custom Categories</h4>
-                <p>Personalize your expense categories to match your lifestyle.</p>
+                <h3>Receipt Scanning</h3>
+                <p>Scan all your receipts, hence saving time.</p>
+                <img src="/images/ocr-scan.png" width="180px">
             </div>
             <div class="feature-card">
-                <h4>Visual Reports</h4>
+                <h3>Visual Reports</h3>
                 <p>Generate beautiful charts and reports to analyze your spending patterns.</p>
+                <img src="/images/data-visual.svg" width="150px">
             </div>
         </div>
     </section>
-    <hr>

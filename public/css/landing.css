@@ -1,48 +1,52 @@
 
-
-
-
 .hero-section {
- 
-  background-size: cover;
-  background-position: center;
-  height: 80vh;
-  color:black;
-  display: flex;
-  align-items: center;
+  display: inline-block;
+  top:180px;
+  margin-bottom: 126px;
+  height: 400px;
+  width:1000px;
   justify-content: center;
   text-align: center;
+  font-family: "Space Grotesk", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
-.hero-section h2 {
-  font-size: 3em;
-  /* color: #ffcb05; */
-  color:black;
+.yellow{
+  color:#bbe86f;
+  
+}
+.hero-section h1{
+  font-size: 60px;
+  color:white;
 }
 .hero-section p {
-  color:black;
-  font-size: 1.5em;
-  margin: 20px 0;
+  color:white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+}
+.hero-left-img{
+  top:180px;
+  margin-top: 300px;
+  border:solid;
+  border-color: solid;
+  display: inline-block;
 }
 .cta-btn {
-  background-color: #1b41e9;
+  background-color: #20D982;
   border: none;
-  color: white;
+  color: black;
   padding: 15px 30px;
-  font-size: 1.2em;
+  font-size: 15px;
   cursor: pointer;
   border-radius: 30px;
 }
 .cta-btn:hover {
-  background-color: #4863de;
+  background-color: #bbe86f;
 }
-
-
-
-
-
-
 @media (max-width: 768px) {
-  
 .hero-section h2 {
   font-size: 35px;
 }
