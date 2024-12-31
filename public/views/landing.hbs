@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Money Mind</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/landing.css">
+    <link rel="stylesheet" href="/css/signin.css">
+
+    <script src="../script/landing.js" defer></script>
+    <script src="../script/Auth.js" defer></script>
+
 </head>
-<body id="home">
-
+<body id="home">    
+    {{> landingHeader}}
     
-    {{> landingHeader
-        homeLink="#home" 
-    }}
-    <img class='hero-left-img' src="/images/image-1.png" width="600px">
-        <div class="hero-section">
-            <h1>Effortless Financial Management at <span class="yellow">Your Fingertips </span> </h1>
-            <p>Create an account today and begin tracking all your expenses, </br>organizing transactions, and monitoring subscriptions in real time,</br> helping you stay in control of your financial health.</p>
-            <button class="cta-btn" onclick="window.location.href='/auth/signin'">Get Started Now</button>
+    <div class="body">
+        <div class="image-section">
+            <img class='hero-left-img' src="/images/image-1.png" width="600px">
         </div>
+        <div class="main-section">
+            <div id="hero" class="hero-section" style="display: block;">
+                <h1>Effortless Financial Management at <span class="yellow">Your Fingertips </span> </h1>
+                <p>Create an account today and begin tracking all your expenses, </br>organizing transactions, and monitoring subscriptions in real time,</br> helping you stay in control of your financial health.</p>
+                <button class="cta-btn" onclick="showSignInPage()">Get Started Now</button>
+            </div>
+            {{> Auth}}
+        </div>
+    </div>
 
-<hr id="services" style="border: none; height: 2px; background-color: black;">
+    <hr id="services" style="border: none; height: 2px; background-color: black;">
 
-{{> features}}
-
- 
-
-{{> footer}}
+    {{> features}}
+    {{> footer}}
     
-</script>
 </body>
 </html>

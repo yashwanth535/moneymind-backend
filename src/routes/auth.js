@@ -1,10 +1,13 @@
 // routes/signin.js
 const express = require("express");
 const router = express.Router();
-const {renderSignIn,renderSignUp,signIn,signUp,logout,user_exists,generate_otp, verify_otp,reset_password} = require("../controllers/auth.Controller");
+const {signIn,signUp,logout,user_exists,generate_otp, verify_otp,reset_password} = require("../controllers/auth.Controller");
 
-router.get('/signin',renderSignIn);
-router.get('/signup',renderSignUp);
+router.get('/',(req,res)=>{
+  res.render('landing');
+  console.log("landing rendering");
+});
+
 router.get('/logout',logout);
 
 router.post('/signin',signIn);

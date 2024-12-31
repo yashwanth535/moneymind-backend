@@ -4,15 +4,6 @@ const { hashPassword } = require('../middleware/bcrypt');
 const nodemailer = require('nodemailer');
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
-const renderSignIn = async (req, res) => {
-  console.log("signin rendering");
-  res.render('signin');
-};
-// ---------------------------------------------------------------------------------------------------------------------------------------
-const renderSignUp = async (req, res) => {
-  console.log("signup rendering");
-  res.render('signup');
-};
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
 const signIn = async (req, res) => {
@@ -120,6 +111,7 @@ const generate_otp=async (req, res) => {
 
 const verify_otp=(req,res)=>{
   const otpval=req.body.otpval;
+  console.log('recieved otp is '+otpval);
   if(req.session.otp==otpval){
     console.log("otp is correct");
     res.status(200).json({message : 'otp is correct'});
@@ -166,8 +158,6 @@ const reset_password=async (req,res)=>{
 }
 // ---------------------------------------------------------------------------------------------------------------------------------------
 module.exports = {
-  renderSignIn,
-  renderSignUp,
   signIn,
   signUp,
   logout,

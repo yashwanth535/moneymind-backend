@@ -1,17 +1,14 @@
-
+.body{
+  display: flex;
+  margin-top: 100px;
+  height: 550px;
+}
 .hero-section {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 126px;
-  height: 400px;
-  width:1000px;
-  justify-content: center;
   text-align: center;
   font-family: "Space Grotesk", serif;
-  font-optical-sizing: auto;
   font-weight: 400;
-  font-style: normal;
   margin-left: -100px;
+  bottom: 0px;
 }
 .yellow{
   color:#bbe86f;

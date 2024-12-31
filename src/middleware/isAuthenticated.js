@@ -16,8 +16,7 @@ function isAuthenticated(req, res, next) {
           <title>UNAUTHOURIZED</title>
       </head>
       <body>
-          <p style="display:inline-block;">Unauthorized, Please <a href='/signin'">signin</a><p>
-          
+          <p style="display:inline-block;">Unauthorized, Please <a href="/?showSignin=true">signin</a><p>
       </body>
       </html>
   `);

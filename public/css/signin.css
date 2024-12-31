@@ -25,16 +25,11 @@ input{
   margin-left: auto;   /* Push the element to the right */
   margin-right: 0; 
   position:relative;
-  top:150px;
-  margin-bottom: 160px;
+  margin-bottom: 126px;
   height: 400px;
   width:900px;
+  margin-top: 60px;
 }
-  .hero-left-img {
-    position: absolute;
-    margin-top: 230px;
-    display: inline-block;
- }
 form {
   width: 350px;
   position: absolute;

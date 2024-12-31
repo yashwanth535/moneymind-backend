@@ -1,0 +1,97 @@
+<div class="container">
+
+
+
+    <form id="signinform" style="display: none;">
+        <h2>Sign in</h2>
+        <p>stay updated on your expenses</p>
+        <input placeholder="Email" name="email" type="text" id="email" required>
+        <br>
+        <div style="position: relative; display: inline-block;">
+            <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+            <button class="toggle" type="button" onclick="togglePassword(event)" id="toggleButton">Show</button>
+        </div>
+        <input class="sub" type="submit" value="Signin">
+        <p id="message"></p>
+        <a href="#" onclick="show_reset_form()">forgot password?</a><br>
+        </br>
+        <p style="display: inline;">don't have an account?</p>
+        <a href="#" onclick="showRegisterPage()">signup</a>
+    </form>
+
+
+
+    <form id="signupForm" style="display: none;">
+      <h2>Signup to MoneyMind</h2>
+      <p>Track smart,spend wisely</p></br>
+      <input placeholder="Email" name="email" type="text" id="email"required>
+      <br>
+      <div style="position: relative; display: inline-block;">
+        <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+        <button class="toggle" type="button" onclick="togglePassword(event)" id="toggleButton">Show</button>
+      </div>
+      <div class="loading" class="loading" style="display: none;">
+              <img src="/images/loading.gif" alt="Loading..." width="20px" >
+      </div>
+      <div class="errorMessages" style="color: rgb(238, 9, 9); display: block;"></div>
+      <p class="wait" style="display:none;">Just a moment, your OTP is on the way! (5 seconds)</p>
+      <input class="sub" type="submit" value="generate OTP">
+      </br><br>
+      <p style="display: inline;">Already have an account?</p>
+      <a href="#" onclick="showSignInPage()">Signin</a>
+    </form>
+
+
+
+
+
+    <form id="reset-otp-generate-form" style="display: none;">
+        <h2>Enter your registered email address</h2>
+        <input placeholder="Email" name="email" type="text" id="email" required>
+        <br>
+        <div class="loading" style="display: none;">
+            <img src="/images/loading.gif" alt="Loading..." width="20px" >
+        </div>
+        <div class="errorMessages" style="color: rgb(238, 9, 9); display: block;"></div>
+        <p class="wait" style="display:none;">Just a moment, your OTP is on the way! (5 seconds)</p>
+        <input class="sub" type="submit" value="send OTP">
+    </form>
+
+
+
+    <form id="otpForm" style="display:none;">
+      <h2>Enter your otp</h2>
+      <p>We’ve sent an OTP to your email address</p>
+      <input placeholder="Enter otp" name="otp" type="text" id="otp" required>
+      <br>
+      <input class="sub" type="submit" value="verify otp">
+      <p id="otpmessage"></p>
+    </form>
+
+    <form id="otpForm-2" style="display:none;">
+      <h2>Enter your otp</h2>
+      <p>We’ve sent an OTP to your email address</p>
+      <input placeholder="Enter otp" name="otp" type="text" id="otp" required>
+      <br>
+      <input class="sub" type="submit" value="verify otp">
+      <p id="otpmessage"></p>
+    </form>
+
+
+    <form id="reset-password-form" style="display: none;">
+        <div style="position: relative; display: inline-block;">
+            <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+            <button class="toggle" type="button" onclick="togglePassword(event)" id="toggleButton">Show</button>
+        </div>
+        <div id="errorMessages-2" style="color: rgb(238, 9, 9); display: block;"></div>
+        <input class="sub" type="submit" value="change_password">
+    </form>
+
+
+    <form id="success" style="display: none;">
+        <h2>our password has been successfully reset. Please log in using your new credentials.</h2>
+        <a href="#" onclick="showSignInPage()">signin</a>
+    </form>
+
+    
+</div>

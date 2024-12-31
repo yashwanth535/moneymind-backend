@@ -4,13 +4,13 @@ const authRoutes       = require("./src/routes/auth");
 const addExpenseRoutes   = require("./src/routes/addExpense")
 const fetchExpenseRoutes = require("./src/routes/fetchExpense")
 const homeRoutes         = require("./src/routes/home")
-const landingRoutes      = require("./src/routes/landing");
+
 
 
 const app = configureApp();
 
 
-app.use("/",landingRoutes);
+app.use("/",authRoutes);
 app.use("/auth", authRoutes);
 app.use("/home",isAuthenticated,homeRoutes);
 app.use("/add-expense",isAuthenticated,addExpenseRoutes);
