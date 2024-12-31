@@ -46,10 +46,10 @@ function checkPassword() {
     errorMessages.appendChild(message);
    
     const criteria = [
-    { regex: /.{8,}/, message: "> At least 8 characters." },
-    { regex: /[A-Z]/, message: "> At least one uppercase letter." },
-    { regex: /[!@#$%^&*()_\-+=~`[\]{}|:;"'<>,.?/]/, message: "> At least one special character." },
-    { regex: /^\S+$/, message: "> No spaces allowed." }
+    { regex: /.{8,}/, message: "○ At least 8 characters." },
+    { regex: /[A-Z]/, message: "○ At least one uppercase letter." },
+    { regex: /[!@#$%^&*()_\-+=~`[\]{}|:;"'<>,.?/]/, message: "○ At least one special character." },
+    { regex: /^\S+$/, message: "○ No spaces allowed." }
     ];
 
     let isValid = true;

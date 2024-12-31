@@ -11,26 +11,17 @@
   {{>landingHeader
     homeLink='/'
   }}
-<img class='hero-left-img' src="/images/image-1.png" width="500px">
+<img class='hero-left-img' src="/images/image-1.png" width="600px">
 <div class="container">
   <form id="signupForm">
     <h2>Signup to MoneyMind</h2>
-    <p>Track smart,spend wisely</p>
+    <p>Track smart,spend wisely</p></br>
     <input placeholder="Email" name="email" type="text" id="email"required>
     <br>
-    <div style="position: relative; display: inline-block;">
-    <input
-        placeholder="Password"
-        name="password"
-        type="password"
-        id="password"
-        required
-        style="padding-right: 4px;" 
-    >
-    <button type="button" onclick="togglePassword()" id="toggleButton">
-        Show
-    </button>
-</div>
+   <div style="position: relative; display: inline-block;">
+      <input placeholder="Password" name="password" type="password" id="password" required style="padding-right: 4px;">
+      <button class="toggle" type="button" onclick="togglePassword('password','toggleButton')" id="toggleButton">Show</button>
+    </div>
  
  <div id="loading" class="loading" style="display: none;">
         <img src="/images/loading.gif" alt="Loading..." width="20px" >
@@ -39,6 +30,7 @@
     <div id="errorMessages" style="color: rgb(238, 9, 9); display: block;"></div>
     <p id="wait" style="display:none;">Just a moment, your OTP is on the way! (5 seconds)</p>
     <input class="sub" type="submit" value="generate OTP">
+    </br><br>
     <p style="display: inline;">Already have an account?</p>
     <a href="/auth/signin">Signin</a>
   </form>

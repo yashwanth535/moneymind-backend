@@ -1,7 +1,7 @@
 
 .hero-section {
+  position: relative;
   display: inline-block;
-  top:180px;
   margin-bottom: 126px;
   height: 400px;
   width:1000px;
@@ -11,6 +11,7 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  margin-left: -100px;
 }
 .yellow{
   color:#bbe86f;
@@ -29,7 +30,7 @@
 }
 .hero-left-img{
   top:180px;
-  margin-top: 300px;
+  margin-top: 230px;
   border:solid;
   border-color: solid;
   display: inline-block;

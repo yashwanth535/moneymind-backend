@@ -1,19 +1,18 @@
 .sub{
-  background-color: #1b41e9;
   cursor: pointer;
-  color:white;
-  width:280px;
+  color:black;
+  background-color:  #20D982;
+  width:150px;
   height:40px;
-  border-radius: 30px;
-  border:solid;
+  border-radius: 10px;
+  border-width: 1px;
 }
- 
 .sub:hover{
-  background-color: #4863de;
+  background-color:  #27cb7f;
 }
 
 input{
-  width: 270px;
+  width: 350px;
   padding: 6px 2px; 
   height:23px;
   margin: 10px 0 10px 0;
@@ -23,26 +22,28 @@ input{
 }
 
 .container {
-  display: inline-block;
+  margin-left: auto;   /* Push the element to the right */
+  margin-right: 0; 
   position:relative;
-  top:180px;
+  top:150px;
   margin-bottom: 160px;
   height: 400px;
-  width:1000px;
-  font-family: "Space Grotesk", serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;  
+  width:900px;
 }
-
+  .hero-left-img {
+    position: absolute;
+    margin-top: 230px;
+    display: inline-block;
+ }
 form {
-  width: 270px;
+  width: 350px;
   position: absolute;
   top: 50%;  /* Centers vertically */
   left: 50%; /* Centers horizontally */
   transform: translate(-50%, -50%);  /* Offsets the element by its width and height to center it */
   padding: 20px;
-  box-shadow: 2px 1px 20px #20D982;
+  background-color: rgba(255, 255, 255);
+  border-radius: 25px;
 }
 
 .toggle{
@@ -56,11 +57,4 @@ form {
   padding: 0;
   font-size: 14px;
   color: #333;
-}
-.hero-left-img{
-  top:180px;
-  margin-top: 300px;
-  border:solid;
-  border-color: solid;
-  display: inline-block;
 }
