@@ -15,6 +15,7 @@
   text-align: center;
   color:rgb(0, 0, 0);
   width: 16%;
+  flex-shrink: 0;
   height: 295px;
   padding: 20px;
   margin: 10px;
@@ -28,6 +29,29 @@
 p{
   color:black;
 }
+@media (max-width: 768px) {  
+.feature-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  gap: 10px; /* Space between cards */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.feature-cards::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Edge */
+}
+
+.feature-card {
+  width: 50%;
+  flex-shrink: 0;
+}
+
+}
+
 
 </style>
 

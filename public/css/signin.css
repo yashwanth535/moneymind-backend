@@ -53,3 +53,16 @@ form {
   font-size: 14px;
   color: #333;
 }
+@media (max-width: 768px) {
+  .container {
+    position:relative;
+    max-width:500px;
+  }
+  form {
+   max-width: 280px;
+  }
+  input{
+    width: 280px;
+  }
+
+}
