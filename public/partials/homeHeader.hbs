@@ -1,23 +1,36 @@
 <style>
-  html, body {
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-margin: 0;
-padding: 0;
-height:100%;
+body,html {
+  background-color: black;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+header {
+  border:solid;
+  border-bottom: white;
+  position: fixed;
+  top: 0;
+  height: 70px;
+  width: 100%;
+  background-color: #280832;
+  display: flex;
+  z-index: 1000;
+  padding: 0 20px; /* Padding to add space on the sides of the header */
+  box-sizing: border-box; /* Ensures padding is included in width calculation */
+}
+.header-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+}
+#logo-img {
+  width: 200px;
+  height: auto; /* Ensure the logo maintains its aspect ratio */
+  object-fit: contain; /* Maintain aspect ratio while fitting into the box */
 }
 
-header {
-height: 90px; 
-background-color: rgb(255, 255, 255);
-position: fixed;
-display:flex;
-width: 100%;
-box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
-top:0px;
-}
-.logobar{
-  flex: 1;
-}
 .navbar {
     flex: 1;
     display: flex;
@@ -26,13 +39,14 @@ top:0px;
 }
 .navbar ul {
   display: flex;
+  justify-content: space-around;
+  gap:20px;
   list-style: none;
 }
 .navbar ul li a{
   font-size: 20px;
-  margin-right: 20px; /* Space between each item */
   text-decoration: none;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 .navbar ul li a:hover {
   text-decoration: underline;
@@ -110,24 +124,22 @@ top:0px;
 
 </style>
 <header>
-    <div class="logobar">
-      <a href="{{homeLink}}">
-      <img id="logo-img" src="/images/moneymind2.png" alt="Money Mind Logo" width="200px;">
+    <div class="header-left">
+      <a href='/home'>
+      <img id="logo-img" src="/images/new_logo_2.png" alt="Money Mind Logo">
       </a>
     </div>
     <div class="navbar">
       <ul>
-        <li><a href="{{homeLink}}">Home</a></li>
-        <li><a href='/add-expense'>Add Transaction</a></li>
-        <li><a href='/fetch-expenses'>Manage Transaction</a></li>
+        <li><a href='/home'>Home</a></li>
+        <li><a href='/add-expense'>Add</a></li>
+        <li><a href='/fetch-expenses'>Manage</a></li>
         <li>
           <a href="javascript:void(0)" id="profileButton" onclick="showProfile()">
             <img id="menu-img" src="/images/menu.png" width="26px">
           </a></li>
       </ul>
     </div>
-  
-  <hr>
 </header>
 
 

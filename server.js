@@ -10,7 +10,8 @@ const homeRoutes         = require("./src/routes/home")
 const app = configureApp();
 
 
-app.use("/",authRoutes);
+// app.use("/",authRoutes);
+app.use("/",homeRoutes);
 app.use("/auth", authRoutes);
 app.use("/home",isAuthenticated,homeRoutes);
 app.use("/add-expense",isAuthenticated,addExpenseRoutes);

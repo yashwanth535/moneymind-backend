@@ -12,7 +12,7 @@
 }
 
 input{
-  width: 350px;
+  width: 300px;
   padding: 6px 2px; 
   height:23px;
   margin: 10px 0 10px 0;
@@ -21,25 +21,14 @@ input{
   border-width: 1.5px;
 }
 
-.container {
-  margin-left: auto;   /* Push the element to the right */
-  margin-right: 0; 
-  position:relative;
-  margin-bottom: 126px;
-  height: 400px;
-  width:900px;
-  margin-top: 60px;
-}
 form {
   width: 350px;
-  position: absolute;
-  top: 50%;  /* Centers vertically */
-  left: 50%; /* Centers horizontally */
-  transform: translate(-50%, -50%);  /* Offsets the element by its width and height to center it */
   padding: 20px;
   background-color: rgba(255, 255, 255);
   border-radius: 25px;
+  box-sizing: border-box; /* This ensures the padding is included in the width */
 }
+
 
 .toggle{
   position: absolute;
@@ -59,7 +48,7 @@ form {
     max-width:500px;
   }
   form {
-   max-width: 280px;
+   width: 350px;
   }
   input{
     width: 280px;
