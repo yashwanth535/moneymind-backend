@@ -8,26 +8,49 @@
     <link rel="stylesheet" href="/css/home.css">
 </head>
 <body onload="retrieveDashBoard()">
-     
-    {{> homeHeader
-        homeLink="/home" 
-    }}
+    <div id="home">
+        {{> homeHeader
+            homeLink="/home" 
+        }}
+        <div id="panel">
+            <div id="left-panel">
+                <div id="left-panel-top">
+                    <ul>
+                        <li>DashBoard</li>
+                        <li>Budget</li>
+                        <li><a href='/fetch-expenses'>Transactions</a></li>
+                        <li>Reports</li>
+                        <li>Groups</li>
+                        <li>To-Do</li>
+                        <li>Custom Categories</li>
+                    </ul>
+                </div>
+                <div id="left-panel-bottom">
+                    <ul>
+                        <li>Profile</li>
+                        <li>Account</li>
+                        <li>feedback</li>
+                        <li><a href='/auth/logout'>Log out</a></li>
+                    </ul>
+                </div>
+            </div>
 
-
-    <div id="home-div">
-        <div id="dashBoard">
-            <h2>Expense Overview</h2>
-            <p id="totalExpenses">Total Expenses: 0/-</p>
-            <canvas id="pieChart" width="200" height="200"></canvas> 
-        </div>
-       <div id="debitSection" style="margin: 20px 0; text-align: center;">
-            <h3>Total Debit This Month: ₹<span id="totalDebit">0</span></h3>
-            <ul id="lastDebitsList" style="list-style: none; padding: 0;">
-                <!-- Last 5 debits will be populated dynamically -->
-            </ul>
+            <div id="right-panel">
+                <div id="dashBoard">
+                    <h2>Expense Overview</h2>
+                    <p id="totalExpenses">Total Expenses: 0/-</p>
+                    <canvas id="pieChart" width="200" height="200"></canvas> 
+                </div>
+                <div id="debitSection" style="margin: 20px 0; text-align: center;">
+                    <h3>Total Debit This Month: ₹<span id="totalDebit">0</span></h3>
+                    <ul id="lastDebitsList" style="list-style: none; padding: 0;">
+                        <!-- Last 5 debits will be populated dynamically -->
+                    </ul>
+                </div>
+                
+            </div>
         </div>
     </div>
-
     <script>
     async function retrieveDashBoard() {
         try {
@@ -41,7 +64,7 @@
                 
                 renderPieChart(data.expenseByPurpose);
             } else {
-                alert('Error fetching dashboard data');
+                {{!-- alert('Error fetching dashboard data'); --}}
             }
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
@@ -114,7 +137,7 @@ async function fetchDebits() {
                 lastDebitsList.appendChild(listItem);
             });
         } else {
-            alert('Error fetching debit data');
+            {{!-- alert('Error fetching debit data'); --}}
         }
     } catch (error) {
         console.error('Error fetching debits:', error);
