@@ -16,6 +16,7 @@ body{
   flex: 0.4; /* Makes image section take up available space */
   flex-shrink: 1; /* Allows the image section to shrink */
   flex-basis: 0;
+
 }
 
 .main-section {

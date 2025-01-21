@@ -6,14 +6,14 @@
   display: flex;
 
 }
+
 #left-panel{
   padding-left: 20px;
   margin-top: 72px;
   background-color: #280832;
-  width: 14%;
+  width: 12%;
   position:fixed;
   height: 89vh;
-
   display:flex;
   flex-direction: column;
   justify-content: space-between;
@@ -29,6 +29,7 @@
 #left-panel-bottom a,li {
   text-decoration: none;
   color:white;
+  font-size: 14px;
 }
 
 #left-panel-top ul li, 
@@ -68,7 +69,8 @@
   max-width: 250px; /* Limit the width of the dashboard */
   margin: 20px;
   padding: 20px; /* Add padding inside the dashboard */
-  background-color: #fff; /* White background for contrast */
+  background-color: #2a2a40; /* Slightly lighter background for inputs */
+  color:white;
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }

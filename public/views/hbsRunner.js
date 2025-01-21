@@ -11,7 +11,7 @@ const partialsPath = path.join(__dirname, "../partials");
 
   app.use(express.static(path.join(__dirname, '../../public')));
 app.get('/',(req,res)=>{
-  res.render('home');
+  res.render('fetch-transactions');
 });
 
 const PORT = 3000;

@@ -1,0 +1,82 @@
+body,html {
+  background-color: black;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+#right-panel{
+  width:100%;
+  flex:0.95;
+  margin-top: 85px;
+  margin-left:18%;
+  display: flex;
+  flex-direction: column;
+}
+
+.formDiv {
+  width: 50%;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #280832;
+  box-shadow: 0 0 5px #83bce3; /* Add glow effect */
+}
+#formType{
+  width: 15%;
+  margin: 0px auto;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #280832;
+  box-shadow: 0 0 5px #83bce3; /* Add glow effect */
+  color:white;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ddd; /* Light gray for labels */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #280832;
+  color: #fff; /* White text inside input */
+  border: 1px solid #444; /* Dark border for inputs */
+  border-radius: 5px;
+}
+
+.form-group input:focus {
+  border-color: #83bce3; /* Highlight on focus */
+  outline: none;
+}
+
+#form-button {
+  padding: 10px 15px;
+  background-color: #83bce3; /* Light blue background for buttons */
+  color: black; /* Black text for button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#form-button:hover {
+  background-color: #66a8c4; /* Slightly darker on hover */
+}
+
+#form-button:active {
+  background-color: #3b7b98; /* Darker blue on active */
+}
+
+#message {
+  color: #ffb3b3; /* Light red for error/success message */
+}
+
+

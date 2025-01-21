@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const getExpenseModel = require("../models/expense");
+const {Debit,Credit} = require("../models/transaction.model");
 
 router.get('/', (req, res) => {
     console.log("home rendering");
@@ -8,24 +8,20 @@ router.get('/', (req, res) => {
 });
 
 router.get('/dashboard', async (req, res) => {
-    const email = req.session.user.email;
-    console.log(email);
-    const Expense = getExpenseModel(email);
-  
     try {
         // Fetch total expenses
-        const total = await Expense.aggregate([
+        const total = await Debit.aggregate([
             { $group: { _id: null, total: { $sum: '$amount' } } }
         ]);
 
         // Fetch expense trend data for line chart
-        const expenseTrend = await Expense.aggregate([
+        const expenseTrend = await Debit.aggregate([
             { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, total: { $sum: "$amount" } } },
             { $sort: { _id: 1 } } // Sort by date
         ]);
 
         // Fetch data for pie chart grouped by purpose
-        const expenseByPurpose = await Expense.aggregate([
+        const expenseByPurpose = await Debit.aggregate([
             { $group: { _id: "$purpose", total: { $sum: "$amount" } } }
         ]);
 
@@ -41,22 +37,15 @@ router.get('/dashboard', async (req, res) => {
 });
 
 router.get('/debits', async (req, res) => {
-    const email = req.session.user.email;
-
-    if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
-    }
 
     try {
-        const Expense = getExpenseModel(email);
-
-        // Get the start and end dates of the current month
+ 
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
         // Calculate total debit for the month
-        const totalDebit = await Expense.aggregate([
+        const totalDebit = await Debit.aggregate([
             {
                 $match: {
                     date: { $gte: startOfMonth, $lte: endOfMonth },
@@ -71,7 +60,7 @@ router.get('/debits', async (req, res) => {
         ]);
 
         // Fetch the last 5 debits
-        const lastDebits = await Expense.find({
+        const lastDebits = await Debit.find({
             date: { $gte: startOfMonth, $lte: endOfMonth },
         })
             .sort({ date: -1 }) // Sort by date (newest first)

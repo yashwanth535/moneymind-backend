@@ -1,0 +1,126 @@
+body,html {
+  background-color: black;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+#right-panel {
+  width: 100%;
+  flex: 0.95;
+  margin-top: 85px;
+  margin-left: 18%;
+  display: flex;
+  flex-direction: column;
+}
+
+#debit-table, #credit-table {
+  width: 100%;  /* Ensure both tables take up 100% of the container width */
+  table-layout: fixed;  /* Optional: Ensures columns have consistent width */
+}
+.table-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+table {
+  width: 100%;  /* Make sure the table stretches across its container */
+  border-collapse: collapse;
+  background-color: #1e1e2f;
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  border: none;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+th {
+  background-color: #2a2a40;
+  color: #d1d1e1;
+}
+
+td {
+  padding: 0px 10px;
+  background-color: #252535;
+  color: #e0e0e0;
+}
+
+tr:hover td {
+  background-color: #33334c;
+  color: #ffffff;
+}
+
+label{
+  color:white;
+  font-size: 15px;
+}
+tr:hover td {
+  background-color: #33334c; /* Highlight row on hover */
+  color: #ffffff; /* Ensure text remains readable */
+}
+#filter-div {
+  position: sticky;
+  top: 0px;
+  width: 99%;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  background-color: #1e1e2f;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+select, input, button {
+  padding: 10px 12px; /* Uniform padding */
+  margin: 5px 0; /* Space around individual elements */
+  font-size: 14px; /* Comfortable font size */
+  color: #ffffff; /* Text color for readability */
+  background-color: #2a2a40; /* Slightly lighter background for inputs */
+  border: 1px solid #444; /* Subtle border */
+  border-radius: 5px; /* Smooth corners */
+  outline: none; /* Remove focus outline */
+}
+
+select:focus, input:focus, button:focus {
+  border-color: #83bce3; /* Highlighted border on focus */
+  box-shadow: 0 0 5px #83bce3; /* Add glow effect */
+}
+
+button {
+  background-color: #71a9d1; /* Primary button color */
+  color: black; /* Text color for buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-radius 0.3s ease; /* Smooth transition for background and border-radius */
+}
+
+button:hover {
+  border-radius: 10px; /* Rounded corners on hover */
+  transition: background-color 0.3s ease, border-radius 0.3s ease; /* Ensure hover transition smoothness */
+}
+
+button:active {
+  border-color: #83bce3; /* Highlighted border on focus */
+  transition: background-color 0.1s ease; /* Slightly faster for active state */
+}
+
+
+@media (max-width: 768px) {
+  div {
+      flex-direction: column; /* Stack filters vertically on small screens */
+      gap: 10px; /* Adjust spacing */
+  }
+
+  select, input, button {
+      width: 100%; /* Full width for smaller screens */
+  }
+}

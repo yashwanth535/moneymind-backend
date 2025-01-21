@@ -2,6 +2,7 @@ const User_Collection = require('../models/User_Collection');
 const { comparePassword } = require('../middleware/bcrypt');
 const { hashPassword } = require('../middleware/bcrypt');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +16,20 @@ const signIn = async (req, res) => {
     if (user) {
       const isMatch = await comparePassword(password, user.pass);
       if (isMatch) {
+        const dbName = email.replace(/[@.]/g, '_'); // Replace both `@` and `.` with `_`
+        const new_url = `${process.env.URL_PARTONE}${dbName}${process.env.URL_PARTTWO}`;
+        if (mongoose.connection.readyState !== 0) {
+          console.log('Closing existing connection...');
+          await mongoose.disconnect();
+        }
+        await mongoose.connect(new_url)
+          .then(() => {
+            console.log('Connected to database:', dbName);
+          })
+          .catch((error) => {
+            console.error('Error in connection:', error.message);
+          });
+
         req.session.user = { email: user.email };
         console.log('Created the session user ' + JSON.stringify(req.session.user));
         res.json({ success: true, email: user.email });
@@ -132,6 +147,19 @@ const signUp=async (req, res) => {
     const hashedPassword = await hashPassword(password);
     const newUser = new User_Collection({ email: email, pass: hashedPassword });
     await newUser.save();
+    const dbName = email.replace(/[@.]/g, '_'); // Replace both `@` and `.` with `_`
+        const new_url = `${process.env.URL_PARTONE}${dbName}${process.env.URL_PARTTWO}`;
+        if (mongoose.connection.readyState !== 0) {
+          console.log('Closing existing connection...');
+          await mongoose.disconnect();
+        }
+        await mongoose.connect(new_url)
+          .then(() => {
+            console.log('Connected to database:', dbName);
+          })
+          .catch((error) => {
+            console.error('Error in connection:', error.message);
+          });
     req.session.user = { email: newUser.email };
     console.log('Created the session user ' + JSON.stringify(req.session.user));
     res.json({ email: newUser.email,message: 'Registration successful, please login' });
