@@ -22,6 +22,9 @@ const signIn = async (req, res) => {
           console.log('Closing existing connection...');
           await mongoose.disconnect();
         }
+        else{
+          console.log("no connection already");
+        }
         await mongoose.connect(new_url)
           .then(() => {
             console.log('Connected to database:', dbName);
