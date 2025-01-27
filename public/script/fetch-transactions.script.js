@@ -261,11 +261,11 @@ if (inputs.length < 4) {
 
 const amount = inputs[0].value; // Assuming first input is amount
 const date = inputs[1].value; // Assuming second input is date
-const purpose = inputs[2].value; // Assuming third input is purpose
-const modeOfPayment = inputs[3].value; // Assuming fourth input is mode of payment
+const bank = inputs[3].value; // Assuming third input is purpose
+const modeOfPayment = inputs[2].value; // Assuming fourth input is mode of payment
 
 // Validation: Check if any field is empty
-if (!amount || !date || !purpose || !modeOfPayment) {
+if (!amount || !date || !bank || !modeOfPayment) {
  alert("All fields are required!");
  return;
 }
@@ -279,8 +279,8 @@ try {
      body: JSON.stringify({
          amount,
          date,
-         purpose,
          modeOfPayment,
+         bank,  
      }),
  });
 

@@ -113,9 +113,9 @@ router.delete('/delete-credit/:id', async (req, res) => {
             {
                 $set: {
                     amount: req.body.amount,
-                    purpose: req.body.purpose,
                     date: req.body.date,
                     modeOfPayment: req.body.modeOfPayment,
+                    bank: req.body.bank,         
                 },
             },
             { new: true }

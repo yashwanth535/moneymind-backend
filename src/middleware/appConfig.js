@@ -5,12 +5,26 @@ const path = require("path");
 const session = require('express-session')
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+
+
+const defaultConnection = mongoose.createConnection(process.env.MONGODB_URI);
+
+// Handle default connection events
+defaultConnection.on('connected', () => {
+  console.log('Default connection to MongoDB Atlas established.');
+});
+
+defaultConnection.on('error', (err) => {
+  console.error('Error in default MongoDB connection:', err.message);
+});
+
+defaultConnection.on('disconnected', () => {
+  console.log('Default MongoDB connection disconnected.');
+});
+
+
 const configureApp = () => {
   const app = express();
-
-  mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('MongoDB connection error:', err));
 
   app.set("trust proxy", 1);
 
@@ -46,5 +60,6 @@ const configureApp = () => {
 };
 
 module.exports = {
-  configureApp
+  configureApp,
+  defaultConnection
 };
