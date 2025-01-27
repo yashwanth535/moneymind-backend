@@ -21,6 +21,7 @@ const signIn = async (req, res) => {
         if (mongoose.connection.readyState !== 0) {
           console.log('Closing existing connection...');
           await mongoose.disconnect();
+          await waitForDisconnection(); // Ensure the disconnection is complete
         }
         else{
           console.log("no connection already");
@@ -36,7 +37,8 @@ const signIn = async (req, res) => {
         req.session.user = { email: user.email };
         console.log('Created the session user ' + JSON.stringify(req.session.user));
         res.json({ success: true, email: user.email });
-      } else {
+      } 
+      else {
         res.json({ success: false, message: 'Invalid password' });
       }
     } else {
@@ -47,6 +49,21 @@ const signIn = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
+
+
+async function waitForDisconnection(retries = 5, delay = 500) {
+  while (mongoose.connection.readyState !== 0 && retries > 0) {
+    console.log('Waiting for disconnection...');
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    retries--;
+  }
+
+  if (mongoose.connection.readyState !== 0) {
+    throw new Error('Failed to disconnect after retries');
+  }
+}
+
 // ---------------------------------------------------------------------------------------------------------------------------------------
 const logout = async (req, res) => {
   req.session.destroy(err => {
