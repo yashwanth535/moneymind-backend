@@ -1,5 +1,5 @@
 // Replace with your actual Gemini API key
-const GEMINI_API_KEY = 'AIzaSyB3xfHzOk3uzoNfZDsH2jtzztLRAsHl9C0';
+const GEMINI_API_KEY = 'AIzaSyDtfeb-zEdKRE9Zo5_3WjOv_OF89_fuxXM';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
 
 // Function to convert image file to base64
