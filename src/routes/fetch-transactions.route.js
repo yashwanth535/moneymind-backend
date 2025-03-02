@@ -3,11 +3,6 @@ const router = express.Router();
 const {Debit,Credit} = require("../models/transaction.model");
 
 
-router.get('/',(req,res)=>{
-    console.log("fetch expense rendering");
-    res.render('fetch-transactions');
-  });
-
 
 router.get('/fetch-debits', async (req, res) => {
     console.log("in fetch router get funtion");

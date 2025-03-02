@@ -3,10 +3,6 @@ const express = require("express");
 const router = express.Router();
 const {signIn,signUp,logout,user_exists,generate_otp, verify_otp,reset_password} = require("../controllers/auth.Controller");
 
-router.get('/',(req,res)=>{
-  res.render('landing');
-  console.log("landing rendering");
-});
 
 router.get('/logout',logout);
 
