@@ -1,34 +1,48 @@
 const express = require("express");
 const router = express.Router();
-const {Debit,Credit} = require("../models/transaction.model");
-
-router.get('/', (req, res) => {
-    console.log("home rendering");
-    res.render('home', { email: req.session.user.email }); 
-});
+const mongoose = require('mongoose');
+const { verifyToken } = require("../middleware/jwt");
 
 router.get('/dashboard', async (req, res) => {
     try {
-        // Fetch total expenses
-        const total = await Debit.aggregate([
+        // Get database name from cookie
+        const token = verifyToken(req.cookies.db);
+        if (!token) {
+            return res.status(401).json({ error: 'Authentication required' });
+        }
+        const dbName = token.userId;
+
+        const db = mongoose.connection.db;
+        const collection = db.collection(dbName);
+
+        // Fetch total expenses (debits)
+        const total = await collection.aggregate([
+            { $match: { type: 'debit' } },
             { $group: { _id: null, total: { $sum: '$amount' } } }
-        ]);
+        ]).toArray();
 
         // Fetch expense trend data for line chart
-        const expenseTrend = await Debit.aggregate([
-            { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, total: { $sum: "$amount" } } },
-            { $sort: { _id: 1 } } // Sort by date
-        ]);
+        const expenseTrend = await collection.aggregate([
+            { $match: { type: 'debit' } },
+            { 
+                $group: { 
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, 
+                    total: { $sum: "$amount" } 
+                } 
+            },
+            { $sort: { _id: 1 } }
+        ]).toArray();
 
         // Fetch data for pie chart grouped by purpose
-        const expenseByPurpose = await Debit.aggregate([
+        const expenseByPurpose = await collection.aggregate([
+            { $match: { type: 'debit' } },
             { $group: { _id: "$purpose", total: { $sum: "$amount" } } }
-        ]);
+        ]).toArray();
 
         res.status(200).json({
-            total: total[0]?.total || 0, // Total expenses
-            expenseTrend, // Expense trend data for line chart
-            expenseByPurpose // Expense data for pie chart
+            total: total[0]?.total || 0,
+            expenseTrend,
+            expenseByPurpose
         });
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -37,47 +51,62 @@ router.get('/dashboard', async (req, res) => {
 });
 
 router.get('/debits', async (req, res) => {
-
     try {
- 
+        // Get database name from cookie
+        const token = verifyToken(req.cookies.db);
+        if (!token) {
+            return res.status(401).json({ error: 'Authentication required' });
+        }
+        const dbName = token.userId;
+
+        const db = mongoose.connection.db;
+        const collection = db.collection(dbName);
+
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
         // Calculate total debit for the month
-        const totalDebit = await Debit.aggregate([
+        const totalDebit = await collection.aggregate([
             {
                 $match: {
-                    date: { $gte: startOfMonth, $lte: endOfMonth },
-                },
+                    type: 'debit',
+                    date: { 
+                        $gte: startOfMonth, 
+                        $lte: endOfMonth 
+                    }
+                }
             },
             {
                 $group: {
                     _id: null,
-                    total: { $sum: '$amount' },
-                },
-            },
-        ]);
+                    total: { $sum: '$amount' }
+                }
+            }
+        ]).toArray();
 
-        // Fetch the last 5 debits
-        const lastDebits = await Debit.find({
-            date: { $gte: startOfMonth, $lte: endOfMonth },
+        // Fetch the last 8 debits
+        const lastDebits = await collection.find({
+            type: 'debit',
+            date: { 
+                $gte: startOfMonth, 
+                $lte: endOfMonth 
+            }
         })
-            .sort({ date: -1 }) // Sort by date (newest first)
-            .limit(8) // Limit to the last 5 records
-            .select('date amount'); // Select only date and amount fields
+        .sort({ date: -1 })
+        .limit(8)
+        .project({ date: 1, amount: 1 })
+        .toArray();
 
         res.status(200).json({
-            totalDebit: totalDebit[0]?.total || 0, // Default to 0 if no records
-            lastDebits,
+            totalDebit: totalDebit[0]?.total || 0,
+            lastDebits
         });
     } catch (err) {
         console.error('Error fetching debits:', err);
         res.status(500).json({ error: 'Error fetching debits', details: err.message });
     }
 });
-
-
 
 module.exports = router;
 

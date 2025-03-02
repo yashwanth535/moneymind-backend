@@ -1,34 +1,43 @@
 const express = require("express");
 const router = express.Router();
-const {Debit,Credit} = require("../models/transaction.model");
-
-router.get('/',(req,res)=>{
-  console.log("add expene rendering");
-  res.render('add-transaction');
-});
+const mongoose = require('mongoose');
+const { verifyToken } = require("../middleware/jwt");
 
 router.post('/debit-transaction', async (req, res) => {
   const { amount, date, purpose, modeOfPayment } = req.body;
-  const email=req.session.user.email;
-  if (!email || !amount || !date || !purpose || !modeOfPayment) {
+  
+  // Get database name from cookie
+  const token = verifyToken(req.cookies.db);
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  const dbName = token.userId;
+
+  if (!amount || !date || !purpose || !modeOfPayment) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
-    console.log('Received request to add expense:', req.body);
-    const newExpense = new Debit({
+    console.log('Received request to add debit:', req.body);
+    
+    const db = mongoose.connection.db;
+    const collection = db.collection(dbName);
+    
+    const transaction = {
+      type: 'debit',
       amount,
       date,
       purpose,
-      modeOfPayment
-    });
+      modeOfPayment,
+      createdAt: new Date()
+    };
 
-    await newExpense.save();
-    console.log('Expense saved successfully.');
+    await collection.insertOne(transaction);
+    console.log('Debit transaction saved successfully.');
 
     res.json({ message: 'Debit Transaction added successfully' });
   } catch (err) {
-    console.error('Error adding expense:', err);
+    console.error('Error adding debit:', err);
     res.status(500).json({ error: 'Internal Server Error', details: err.message });
   }
 });
@@ -36,23 +45,36 @@ router.post('/debit-transaction', async (req, res) => {
 router.post('/credit-transaction', async (req, res) => {
   console.log("inside credit route");
   const { amount, date, modeOfPayment, bank } = req.body;
-  const email=req.session.user.email;
-  if (!email || !amount || !date || !bank || !modeOfPayment) {
+
+  // Get database name from cookie
+  const token = verifyToken(req.cookies.db);
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  const dbName = token.userId;
+
+  if (!amount || !date || !bank || !modeOfPayment) {
     console.log("missing fields");
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
-    console.log('Received request to add expense:', req.body);
-    const newCredit = new Credit({
+    console.log('Received request to add credit:', req.body);
+    
+    const db = mongoose.connection.db;
+    const collection = db.collection(dbName);
+    
+    const transaction = {
+      type: 'credit',
       amount,
       date,
       modeOfPayment,
-      bank
-    });
+      bank,
+      createdAt: new Date()
+    };
 
-    await newCredit.save();
-    console.log('Expense saved successfully.');
+    await collection.insertOne(transaction);
+    console.log('Credit transaction saved successfully.');
 
     res.json({ message: 'Credit transaction added successfully' });
   } catch (err) {
@@ -60,6 +82,5 @@ router.post('/credit-transaction', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error', details: err.message });
   }
 });
-
 
 module.exports = router;
