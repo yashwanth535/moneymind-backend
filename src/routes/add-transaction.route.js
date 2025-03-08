@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose');
 const { verifyToken } = require("../middleware/jwt");
+const getExpenseModel = require("../models/Collection");
 
 router.post('/debit-transaction', async (req, res) => {
   const { amount, date, purpose, modeOfPayment } = req.body;
@@ -20,19 +21,22 @@ router.post('/debit-transaction', async (req, res) => {
   try {
     console.log('Received request to add debit:', req.body);
     
-    const db = mongoose.connection.db;
-    const collection = db.collection(dbName);
+    // Get the dynamic model for this user
+    const ExpenseModel = getExpenseModel(dbName);
     
-    const transaction = {
+    // Create a new transaction document
+    const transaction = new ExpenseModel({
       type: 'debit',
-      amount,
-      date,
+      amount: Number(amount),
+      date: new Date(date),
       purpose,
-      modeOfPayment,
-      createdAt: new Date()
-    };
+      modeOfPayment
+    });
 
-    await collection.insertOne(transaction);
+    console.log('Saving transaction:', JSON.stringify(transaction, null, 2));
+
+    // Save using Mongoose
+    await transaction.save();
     console.log('Debit transaction saved successfully.');
 
     res.json({ message: 'Debit Transaction added successfully' });
@@ -61,19 +65,22 @@ router.post('/credit-transaction', async (req, res) => {
   try {
     console.log('Received request to add credit:', req.body);
     
-    const db = mongoose.connection.db;
-    const collection = db.collection(dbName);
+    // Get the dynamic model for this user
+    const ExpenseModel = getExpenseModel(dbName);
     
-    const transaction = {
+    // Create a new transaction document
+    const transaction = new ExpenseModel({
       type: 'credit',
-      amount,
-      date,
+      amount: Number(amount),
+      date: new Date(date),
       modeOfPayment,
-      bank,
-      createdAt: new Date()
-    };
+      bank
+    });
 
-    await collection.insertOne(transaction);
+    console.log('Saving transaction:', JSON.stringify(transaction, null, 2));
+
+    // Save using Mongoose
+    await transaction.save();
     console.log('Credit transaction saved successfully.');
 
     res.json({ message: 'Credit transaction added successfully' });

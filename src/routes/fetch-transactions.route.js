@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { verifyToken } = require("../middleware/jwt");
 const { ObjectId } = require('mongodb');
+const getExpenseModel = require("../models/Collection");
 
 router.get('/fetch-debits', async (req, res) => {
     console.log("in fetch router get function");
@@ -16,11 +17,15 @@ router.get('/fetch-debits', async (req, res) => {
     const dbName = token.userId;
 
     try {
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
-        console.log("collection is "+collection);
-        const transactions = await collection.find({ type: 'debit' }).toArray();
-        console.log("transactions are "+transactions);
+        // Get the dynamic model for this user
+        const ExpenseModel = getExpenseModel(dbName);
+        
+        // Fetch all debit transactions
+        const transactions = await ExpenseModel.find({ type: 'debit' })
+            .sort({ date: -1 })
+            .lean();
+            
+        console.log("Found debit transactions:", transactions.length);
         res.status(200).json(transactions);
     } catch (err) {
         console.error('Error fetching debit transactions:', err);
@@ -39,10 +44,15 @@ router.get('/fetch-credits', async (req, res) => {
     const dbName = token.userId;
 
     try {
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
+        // Get the dynamic model for this user
+        const ExpenseModel = getExpenseModel(dbName);
         
-        const transactions = await collection.find({ type: 'credit' }).toArray();
+        // Fetch all credit transactions
+        const transactions = await ExpenseModel.find({ type: 'credit' })
+            .sort({ date: -1 })
+            .lean();
+            
+        console.log("Found credit transactions:", transactions.length);
         res.status(200).json(transactions);
     } catch (err) {
         console.error('Error fetching credit transactions:', err);
@@ -50,7 +60,7 @@ router.get('/fetch-credits', async (req, res) => {
     }
 });
 
-router.delete('/delete-debit/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         // Get database name from cookie
         const token = verifyToken(req.cookies.db);
@@ -59,22 +69,34 @@ router.delete('/delete-debit/:id', async (req, res) => {
         }
         const dbName = token.userId;
 
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
+        // Get the dynamic model for this user
+        const ExpenseModel = getExpenseModel(dbName);
 
-        const result = await collection.deleteOne({
-            _id: new ObjectId(req.params.id),
-            type: 'debit'
+        // First find the transaction to determine its type
+        const transaction = await ExpenseModel.findOne({
+            _id: new ObjectId(req.params.id)
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+
+        // Delete the transaction
+        const result = await ExpenseModel.deleteOne({
+            _id: new ObjectId(req.params.id)
         });
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: 'Transaction not found' });
         }
 
-        res.status(200).json({ message: 'Transaction deleted successfully' });
+        res.status(200).json({ 
+            message: 'Transaction deleted successfully',
+            type: transaction.type
+        });
     } catch (err) {
         console.error('Error deleting transaction:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error', details: err.message });
     }
 });
 
@@ -88,15 +110,15 @@ router.put('/edit-debit/:id', async (req, res) => {
         const dbName = token.userId;
         console.log("dbName:", dbName);
 
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
+        // Get the dynamic model for this user
+        const ExpenseModel = getExpenseModel(dbName);
         
         // Log the request data
         console.log("Updating transaction with ID:", req.params.id);
         console.log("Update data:", req.body);
 
         // Verify if the document exists first
-        const existingDoc = await collection.findOne({
+        const existingDoc = await ExpenseModel.findOne({
             _id: new ObjectId(req.params.id),
             type: 'debit'
         });
@@ -109,9 +131,9 @@ router.put('/edit-debit/:id', async (req, res) => {
         }
 
         const updateData = {
-            amount: req.body.amount,
+            amount: Number(req.body.amount),
             purpose: req.body.purpose,
-            date: req.body.date,
+            date: new Date(req.body.date),
             modeOfPayment: req.body.modeOfPayment,
             type: 'debit', // Ensure type remains debit
             updatedAt: new Date()
@@ -119,47 +141,20 @@ router.put('/edit-debit/:id', async (req, res) => {
 
         console.log("Update data after processing:", updateData);
 
-        await collection.findOneAndUpdate(
-            { _id: new ObjectId(req.params.id) }, // Query filter
-            { $set: updateData }, 
-            { returnDocument: 'after' } // Ensures the updated document is returned
+        const updatedDoc = await ExpenseModel.findOneAndUpdate(
+            { _id: new ObjectId(req.params.id) },
+            { $set: updateData },
+            { new: true, runValidators: true }
         );
 
         console.log("Transaction updated successfully");
         res.status(200).json({ 
-            message: 'Transaction updated successfully', 
+            message: 'Transaction updated successfully',
+            transaction: updatedDoc
         });
     } catch (err) {
         console.error('Error updating transaction:', err);
         res.status(500).json({ error: 'Internal server error', details: err.message });
-    }
-});
-
-router.delete('/delete-credit/:id', async (req, res) => {
-    try {
-        // Get database name from cookie
-        const token = verifyToken(req.cookies.db);
-        if (!token) {
-            return res.status(401).json({ error: 'Authentication required' });
-        }
-        const dbName = token.userId;
-
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
-
-        const result = await collection.deleteOne({
-            _id: new ObjectId(req.params.id),
-            type: 'credit'
-        });
-
-        if (result.deletedCount === 0) {
-            return res.status(404).json({ message: 'Transaction not found' });
-        }
-
-        res.status(200).json({ message: 'Transaction deleted successfully' });
-    } catch (err) {
-        console.error('Error deleting transaction:', err);
-        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
@@ -173,15 +168,15 @@ router.put('/edit-credit/:id', async (req, res) => {
         const dbName = token.userId;
         console.log("dbName:", dbName);
 
-        const db = mongoose.connection.db;
-        const collection = db.collection(dbName);
+        // Get the dynamic model for this user
+        const ExpenseModel = getExpenseModel(dbName);
         
         // Log the request data
         console.log("Updating transaction with ID:", req.params.id);
         console.log("Update data:", req.body);
 
         // Verify if the document exists first
-        const existingDoc = await collection.findOne({
+        const existingDoc = await ExpenseModel.findOne({
             _id: new ObjectId(req.params.id),
             type: 'credit'
         });
@@ -194,8 +189,8 @@ router.put('/edit-credit/:id', async (req, res) => {
         }
 
         const updateData = {
-            amount: req.body.amount,
-            date: req.body.date,
+            amount: Number(req.body.amount),
+            date: new Date(req.body.date),
             modeOfPayment: req.body.modeOfPayment,
             bank: req.body.bank,
             type: 'credit', // Ensure type remains credit
@@ -204,15 +199,16 @@ router.put('/edit-credit/:id', async (req, res) => {
 
         console.log("Update data after processing:", updateData);
         
-        await collection.findOneAndUpdate(
-            { _id: new ObjectId(req.params.id) }, // Query filter
-            { $set: updateData }, 
-            { returnDocument: 'after' } // Ensures the updated document is returned
+        const updatedDoc = await ExpenseModel.findOneAndUpdate(
+            { _id: new ObjectId(req.params.id) },
+            { $set: updateData },
+            { new: true, runValidators: true }
         );
 
         console.log("Transaction updated successfully");
         res.status(200).json({ 
-            message: 'Transaction updated successfully', 
+            message: 'Transaction updated successfully',
+            transaction: updatedDoc
         });
     } catch (err) {
         console.error('Error updating transaction:', err);

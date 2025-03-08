@@ -3,6 +3,7 @@ const authRoutes       = require("./src/routes/auth.route");
 const addTransactionRoutes   = require("./src/routes/add-transaction.route")
 const fetchTransactionRoutes = require("./src/routes/fetch-transactions.route")
 const homeRoutes         = require("./src/routes/home.route")
+const reportsRoute = require("./src/routes/reports.route")
 
 
 
@@ -19,6 +20,7 @@ app.use("/auth", authRoutes);
 app.use("/home",homeRoutes);
 app.use("/add-transaction",addTransactionRoutes);
 app.use("/fetch-transactons",fetchTransactionRoutes);
+app.use("/reports", reportsRoute);
 
 
 
