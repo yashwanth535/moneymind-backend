@@ -4,6 +4,9 @@ const { hashPassword } = require('../middleware/bcrypt');
 const { generateToken ,verifyToken} = require("../middleware/jwt");
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -213,7 +216,75 @@ const is_Authenticated = async (req, res) => {
     return res.status(401).json({ authenticated: false, message: "Authentication failed" });
   }
 };
+// ---------------------------------------------------------------------------------------------------------------------------------------
 
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const google_signin = async (req, res) => {
+  console.log("inside google signin");
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({ message: "Google credential is required" });
+    }
+
+    // Verify the Google token
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+      return res.status(400).json({ message: "Invalid Google token" });
+    }
+
+    const { sub: googleId, email, name, picture } = payload;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // If user doesn't exist, create a new user record (excluding password)
+      user = new User({ email });
+      await user.save();
+
+      // Create a dedicated collection for the user
+      const dbName = email.replace(/[@.]/g, '_');
+      try {
+        const db = mongoose.connection.db;
+        const collection = db.collection(dbName);
+        await collection.insertOne({ message: "Collection created successfully!" });
+        console.log(`Collection '${dbName}' created and document inserted.`);
+      } catch (error) {
+        console.error("Error creating collection:", error);
+      }
+    }
+
+    // Generate token for DB access
+    const dbName = email.replace(/[@.]/g, '_');
+    var token = generateToken(dbName);
+
+    // Set db token cookie
+    res.cookie("db", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+    });
+
+    return res.status(200).json({
+      success: true,
+      token: credential,
+      user: { _id: googleId, email, name, picture },
+      message: "Google sign-in successful",
+    });
+
+  } catch (error) {
+    console.error("Google authentication error:", error);
+    return res.status(500).json({ success: false, message: "Server error during authentication" });
+  }
+};
 
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
@@ -226,4 +297,5 @@ module.exports = {
   verify_otp,
   reset_password,
   is_Authenticated,
+  google_signin
 };

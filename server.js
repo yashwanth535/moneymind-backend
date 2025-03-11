@@ -4,7 +4,7 @@ const addTransactionRoutes   = require("./src/routes/add-transaction.route")
 const fetchTransactionRoutes = require("./src/routes/fetch-transactions.route")
 const homeRoutes         = require("./src/routes/home.route")
 const reportsRoute = require("./src/routes/reports.route")
-
+const budgetRoutes = require("./src/routes/budget.route")
 
 
 const app = configureApp();
@@ -21,6 +21,7 @@ app.use("/home",homeRoutes);
 app.use("/add-transaction",addTransactionRoutes);
 app.use("/fetch-transactons",fetchTransactionRoutes);
 app.use("/reports", reportsRoute);
+app.use("/budgets", budgetRoutes);
 
 
 
