@@ -272,6 +272,7 @@ const google_signin = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
     });
+    
 
     return res.status(200).json({
       success: true,
