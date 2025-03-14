@@ -176,13 +176,8 @@ router.get('/stats', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
-// Update a budget
 router.put('/:id', async (req, res) => {
   try {
-    const { amount } = req.body;
-    const budgetId = req.params.id;
-
     const token = verifyToken(req.cookies.db);
     if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -190,44 +185,23 @@ router.put('/:id', async (req, res) => {
     const dbName = token.userId;
     const ExpenseModel = getExpenseModel(dbName);
 
-    const budget = await ExpenseModel.findOne({ 
-      _id: budgetId,
-      type: 'budget'
-    });
+    const budget = await ExpenseModel.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      { new: true }
+    );
 
     if (!budget) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Budget not found' 
-      });
+      return res.status(404).json({ success: false, message: 'Budget not found' });
     }
 
-    if (amount) budget.amount = Number(amount);
-    await budget.save();
-
-    // Calculate current spent amount
-    const { firstDay, lastDay } = getCurrentMonthDateRange();
-    const transactions = await ExpenseModel.find({
-      type: 'debit',
-      purpose: budget.category,
-      date: {
-        $gte: firstDay,
-        $lte: lastDay
-      }
-    });
-
-    const spent = transactions.reduce((total, trans) => total + trans.amount, 0);
-    const budgetWithSpent = {
-      ...budget.toObject(),
-      spent
-    };
-
-    res.json({ success: true, budget: budgetWithSpent });
+    res.json({ success: true, budget });
   } catch (error) {
     console.error('Error updating budget:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 // Delete a budget
 router.delete('/:id', async (req, res) => {
@@ -259,3 +233,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router; 
+
+// ... rest of the code ...
