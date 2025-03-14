@@ -5,7 +5,7 @@ const {
   getGoals,
   createGoal,
   deleteGoal
-} = require('../controllers/goals.controller');
+} = require('../controllers/goals.Controller');
 
 
 // Get lifetime savings

@@ -57,6 +57,7 @@ const createProfile = async (req, res) => {
     let profile = await ExpenseModel.findOne({ type: 'profile' });
 
     if (profile) {
+      
       // Update existing profile
       profile.name = name;
       profile.email = email;
