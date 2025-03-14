@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken } = require("../middleware/jwt");
-const { getProfile, createProfile, updateProfile } = require("../controllers/profile.controller");
+const { getProfile, createProfile, updateProfile } = require("../controllers/profile.Controller");
 
 // Middleware to verify token and add userId to request
 const authMiddleware = (req, res, next) => {
