@@ -135,6 +135,8 @@ const verify_otp = (req,res) => {
   const otpval = req.body.otp;
   console.log('recieved otp is '+otpval);
   const otp_json = verifyToken(req.cookies.otp);
+  console.log("cookies accept");
+  console.log(otp_json.userId);
   if (!otp_json) {
     return res.status(400).json({ error: "Invalid or expired OTP" });
   }
