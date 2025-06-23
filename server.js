@@ -15,6 +15,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/ping", (req, res) => {
+  res.status(204).end(); 
+});
+
+app.get("/api/ping", (req, res) => {
+  res.send("man of the math of the tournament of the cricket")
+});
+
 app.use("/",authRoutes);
 app.use("/auth", authRoutes);
 app.use("/home",homeRoutes);
