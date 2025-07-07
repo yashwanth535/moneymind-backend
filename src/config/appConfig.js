@@ -8,7 +8,7 @@ const mongoConnect = require("./mongoConnect");
 const configureApp = async () => {
   const app = express();
 
-  // await mongoConnect(); // Connect here
+  await mongoConnect(); // Connect here
 
   const allowedOrigins = process.env.FRONTEND_URL?.split(",") || [];
   console.log("CORS Origin:", process.env.FRONTEND_URL);
