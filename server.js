@@ -26,7 +26,7 @@ app.get("/api/ping", (req, res) => {
   res.send("man of the math of the tournament of the cricket")
 });
 
-app.get('/api/health', async (req, res) => {
+app.get('/api/db', async (req, res) => {
   try {
     const readyState = mongoose.connection.readyState;
     const stateMap = {
@@ -44,22 +44,34 @@ app.get('/api/health', async (req, res) => {
       });
     }
 
-    const ping = await mongoose.connection.db.admin().ping();
+    const db = mongoose.connection.db;
+    const collection = db.collection("testdb");
+
+    // Fetch the first (and only) document
+    const document = await collection.findOne({});
+
+    if (!document) {
+      return res.status(404).json({
+        status: "error",
+        message: "No document found in collection"
+      });
+    }
 
     return res.status(200).json({
       status: "ok",
-      message: "MongoDB connected and responsive",
+      message: "MongoDB connected and document fetched",
       readyState: stateMap[readyState],
-      ping
+      document
     });
   } catch (err) {
     return res.status(500).json({
       status: "error",
-      message: "MongoDB health check failed",
+      message: "MongoDB query failed",
       error: err.message
     });
   }
 });
+
 
 
 app.use("/",authRoutes);
