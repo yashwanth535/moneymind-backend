@@ -9,6 +9,7 @@ const reportsRoute = require("./src/routes/reports.route")
 const budgetRoutes = require("./src/routes/budget.route")
 const profileRoutes = require("./src/routes/profile.route")
 const goalsRoutes = require("./src/routes/goals.route")
+const ytRoutes = require("./src/routes/yt.route")
 
 const startServer = async () => {
 const app = await configureApp();
@@ -83,6 +84,7 @@ app.use("/reports", reportsRoute);
 app.use("/budgets", budgetRoutes);
 app.use("/profile", profileRoutes);
 app.use("/goals", goalsRoutes);
+app.use("/yt", ytRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {

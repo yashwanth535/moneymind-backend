@@ -122,6 +122,7 @@ const generate_otp = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log("not success");
+      console.log(error);
       return res.status(400).json({ message: 'Please enter a valid email address.' });
     }
     console.log("success");
