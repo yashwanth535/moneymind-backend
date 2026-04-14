@@ -23,48 +23,60 @@ const youtube = google.youtube({
 // =======================
 const getYtLinks = async (_, res) => {
   try {
-    // 🔹 DB videos
-    try {
-      const token = await oauth2Client.getAccessToken();
-      console.log("Access token fetched");
-    } catch (err) {
-      console.error("❌ TOKEN ERROR:");
-      console.error(err.response?.data || err.message || err);
-    }
-
     console.log("get yt links controller triggered");
+
+    // ✅ ALWAYS fetch DB first
     const dbLinks = await VideoLink.find()
       .sort({ createdAt: -1 })
       .lean();
-    console.log("dbLinks:"+dbLinks);
 
-    // 🔹 YouTube playlist videos
-    const ytRes = await youtube.playlistItems.list({
-      part: "snippet",
-      playlistId: process.env.YOUTUBE_PLAYLIST_ID,
-      maxResults: 50,
-    });
-    console.log("yt res:"+ytRes);
+    let ytLinks = [];
 
-    const ytLinks = ytRes.data.items.map((item) => {
-      const videoId = item.snippet.resourceId.videoId;
+    // ✅ Wrap ALL YouTube logic separately
+    try {
+      console.log("Trying YouTube fetch...");
 
-      return {
-        _id: `yt_${item.id}`, // fake id to differentiate
-        url: `https://www.youtube.com/watch?v=${videoId}`,
-        videoId,
-        title: item.snippet.title,
-        thumbnailUrl: item.snippet.thumbnails?.medium?.url,
-        section: "youtube", // mark separately
-        isYoutube: true,
-        playlistItemId: item.id, // IMPORTANT for deletion
-      };
-    });
-    
+      await oauth2Client.getAccessToken();
+
+      const ytRes = await youtube.playlistItems.list({
+        part: "snippet",
+        playlistId: process.env.YOUTUBE_PLAYLIST_ID,
+        maxResults: 50,
+      });
+
+      ytLinks = ytRes.data.items.map((item) => {
+        const videoId = item.snippet.resourceId.videoId;
+
+        return {
+          _id: `yt_${item.id}`,
+          url: `https://www.youtube.com/watch?v=${videoId}`,
+          videoId,
+          title: item.snippet.title,
+          thumbnailUrl: item.snippet.thumbnails?.medium?.url,
+          section: "youtube",
+          isYoutube: true,
+          playlistItemId: item.id,
+        };
+      });
+
+      console.log("✅ YouTube fetch success");
+
+    } catch (ytError) {
+      console.error("⚠️ YouTube fetch failed:");
+      console.error(ytError.response?.data || ytError.message);
+
+      // 👉 fallback → empty ytLinks
+      ytLinks = [];
+    }
+
+    // ✅ ALWAYS return something
     return res.json({
       links: [...ytLinks, ...dbLinks],
     });
+
   } catch (error) {
+    console.error("❌ CRITICAL ERROR:", error);
+
     return res.status(500).json({
       message: "Failed to fetch videos.",
       error: String(error),
