@@ -9,6 +9,7 @@
     "express": "^4.21.0",
     "express-session": "^1.18.0",
     "google-auth-library": "^9.15.1",
+    "googleapis": "^171.4.0",
     "hbs": "^4.2.0",
     "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",

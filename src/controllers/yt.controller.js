@@ -1,19 +1,83 @@
 const VideoLink = require("../models/VideoLink");
 const { extractYouTubeId, fetchYouTubeMeta } = require("../utils/youtube");
+const { google } = require("googleapis");
 
+// 🔥 Setup YouTube client
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI
+);
+
+oauth2Client.setCredentials({
+  refresh_token: process.env.YOUTUBE_REFRESH_TOKEN,
+});
+
+const youtube = google.youtube({
+  version: "v3",
+  auth: oauth2Client,
+});
+
+// =======================
+// GET (DB + YOUTUBE)
+// =======================
 const getYtLinks = async (_, res) => {
   try {
-    const links = await VideoLink.find().sort({ createdAt: -1 }).lean();
-    return res.json({ links });
+    // 🔹 DB videos
+    try {
+      const token = await oauth2Client.getAccessToken();
+      console.log("Access token fetched");
+    } catch (err) {
+      console.error("❌ TOKEN ERROR:");
+      console.error(err.response?.data || err.message || err);
+    }
+
+    console.log("get yt links controller triggered");
+    const dbLinks = await VideoLink.find()
+      .sort({ createdAt: -1 })
+      .lean();
+    console.log("dbLinks:"+dbLinks);
+
+    // 🔹 YouTube playlist videos
+    const ytRes = await youtube.playlistItems.list({
+      part: "snippet",
+      playlistId: process.env.YOUTUBE_PLAYLIST_ID,
+      maxResults: 50,
+    });
+    console.log("yt res:"+ytRes);
+
+    const ytLinks = ytRes.data.items.map((item) => {
+      const videoId = item.snippet.resourceId.videoId;
+
+      return {
+        _id: `yt_${item.id}`, // fake id to differentiate
+        url: `https://www.youtube.com/watch?v=${videoId}`,
+        videoId,
+        title: item.snippet.title,
+        thumbnailUrl: item.snippet.thumbnails?.medium?.url,
+        section: "youtube", // mark separately
+        isYoutube: true,
+        playlistItemId: item.id, // IMPORTANT for deletion
+      };
+    });
+    
+    return res.json({
+      links: [...ytLinks, ...dbLinks],
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Failed to fetch videos.", error: String(error) });
+    return res.status(500).json({
+      message: "Failed to fetch videos.",
+      error: String(error),
+    });
   }
 };
 
+// =======================
+// ADD (UNCHANGED)
+// =======================
 const addYtLink = async (req, res) => {
   try {
+    console.log("add yt link controller triggered");
     const rawUrl = req.body?.url;
     const section = req.body?.section || "watch-now";
     const customTitle = (req.body?.title || "").trim();
@@ -45,21 +109,33 @@ const addYtLink = async (req, res) => {
     return res.status(201).json({ link });
   } catch (error) {
     if (error?.code === 11000) {
-      return res
-        .status(409)
-        .json({ message: "This video already exists in the selected section." });
+      return res.status(409).json({
+        message: "This video already exists in the selected section.",
+      });
     }
-    return res
-      .status(500)
-      .json({ message: "Failed to add video.", error: String(error) });
+    return res.status(500).json({
+      message: "Failed to add video.",
+      error: String(error),
+    });
   }
 };
 
+// =======================
+// MOVE (DB ONLY)
+// =======================
 const moveYtLinkSection = async (req, res) => {
   try {
     const section = req.body?.section;
+
     if (!["watch-now", "watch-later"].includes(section)) {
       return res.status(400).json({ message: "Invalid section." });
+    }
+
+    // ❌ prevent moving YouTube items
+    if (req.params.id.startsWith("yt_")) {
+      return res.status(400).json({
+        message: "Cannot move YouTube playlist videos.",
+      });
     }
 
     const updated = await VideoLink.findByIdAndUpdate(
@@ -71,30 +147,47 @@ const moveYtLinkSection = async (req, res) => {
     if (!updated) {
       return res.status(404).json({ message: "Video not found." });
     }
+
     return res.json({ link: updated });
   } catch (error) {
-    if (error?.code === 11000) {
-      return res.status(409).json({
-        message: "This video already exists in that section.",
-      });
-    }
-    return res
-      .status(500)
-      .json({ message: "Failed to move video.", error: String(error) });
+    return res.status(500).json({
+      message: "Failed to move video.",
+      error: String(error),
+    });
   }
 };
 
+// =======================
+// DELETE (DB + YOUTUBE)
+// =======================
 const deleteYtLink = async (req, res) => {
   try {
-    const deleted = await VideoLink.findByIdAndDelete(req.params.id);
+    const id = req.params.id;
+
+    // 🔥 If YouTube item
+    if (id.startsWith("yt_")) {
+      const playlistItemId = id.replace("yt_", "");
+
+      await youtube.playlistItems.delete({
+        id: playlistItemId,
+      });
+
+      return res.json({ ok: true, source: "youtube" });
+    }
+
+    // 🔹 Otherwise DB
+    const deleted = await VideoLink.findByIdAndDelete(id);
+
     if (!deleted) {
       return res.status(404).json({ message: "Video not found." });
     }
-    return res.json({ ok: true });
+
+    return res.json({ ok: true, source: "db" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Failed to remove video.", error: String(error) });
+    return res.status(500).json({
+      message: "Failed to remove video.",
+      error: String(error),
+    });
   }
 };
 
