@@ -75,16 +75,16 @@ app.get('/api/db', async (req, res) => {
 
 
 
-app.use("/",authRoutes);
-app.use("/auth", authRoutes);
-app.use("/home",homeRoutes);
-app.use("/add-transaction",addTransactionRoutes);
-app.use("/fetch-transactions",fetchTransactionRoutes);
-app.use("/reports", reportsRoute);
-app.use("/budgets", budgetRoutes);
-app.use("/profile", profileRoutes);
-app.use("/goals", goalsRoutes);
-app.use("/yt", ytRoutes);
+app.use("/api",authRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/home",homeRoutes);
+app.use("/api/add-transaction",addTransactionRoutes);
+app.use("/api/fetch-transactions",fetchTransactionRoutes);
+app.use("/api/reports", reportsRoute);
+app.use("/api/budgets", budgetRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/goals", goalsRoutes);
+app.use("/api/yt", ytRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {

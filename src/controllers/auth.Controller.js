@@ -15,35 +15,47 @@ const signIn = async (req, res) => {
   console.log("entered signin POST form read");
   const { email, password } = req.body;
 
+  // 1. Guard against empty request inputs
+  if (!email || !password) {
+    return res.json({ success: false, message: "Email and password are required" });
+  }
+
   try {
     const user = await User.findOne({ email: email });
     
     if (user) {
+      // 2. Guard against users created via Google Sign-In (no password set)
+      if (!user.pass) {
+        return res.json({ 
+          success: false, 
+          message: 'This account was created with Google Sign-In. Please sign in with Google.' 
+        });
+      }
+
       const isMatch = await comparePassword(password, user.pass);
       if (isMatch) {
         const dbName = email.replace(/[@.]/g, '_');
         var token = generateToken(dbName);
         res.cookie("db", token, {
             httpOnly: true,
-              secure: process.env.NODE_ENV === "production",
-              sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-              maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
-          });
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
+        });
         
-        res.json({ success: true, email: user.email });
+        return res.json({ success: true, email: user.email });
       } 
       else {
-        res.json({ success: false, message: 'Invalid password' });
+        return res.json({ success: false, message: 'Invalid password' });
       }
     } else {
-      res.json({ success: false, message: "Can't find email" });
+      return res.json({ success: false, message: "Can't find email" });
     }
   } catch (err) {
     console.error('Error during signin:', err);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
 const logout = async (req, res) => {

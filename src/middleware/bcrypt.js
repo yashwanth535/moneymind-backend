@@ -16,6 +16,9 @@ async function hashPassword(plainTextPassword) {
 
 // Function to compare the plain text password with the hashed password
 async function comparePassword(plainTextPassword, hashedPassword) {
+    if (!plainTextPassword || !hashedPassword) {
+        return false;
+    }
     try {
         const isMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
         return isMatch;
