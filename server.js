@@ -87,8 +87,9 @@ app.use("/api/goals", goalsRoutes);
 app.use("/api/yt", ytRoutes);
 
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`listening to http://localhost:${PORT}`);
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`listening on port ${PORT}`);
 });
 }
 startServer();
